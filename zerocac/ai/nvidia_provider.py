@@ -1,4 +1,4 @@
-"""NVIDIA NIM provider implementation for Nemotron 3 Ultra and 3.5 Super VL."""
+"""NVIDIA NIM provider implementation for Nemotron models."""
 
 from typing import List, Optional
 
@@ -18,7 +18,7 @@ class NVIDIAProvider(BaseLLMProvider):
     """Integrates NVIDIA NIM microservices API for Nemotron models."""
 
     DEFAULT_BASE_URL = "https://integrate.api.nvidia.com/v1"
-    DEFAULT_MODEL = "nemotron-3.5-super-vl"
+    DEFAULT_MODEL = "nvidia/nemotron-3.5-lightning-30b-a3b"
 
     def __init__(
         self,
@@ -57,6 +57,9 @@ class NVIDIAProvider(BaseLLMProvider):
             "temperature": temperature,
             "max_tokens": max_tokens,
         }
+        if "lightning" in target_model.lower() or "thinking" in target_model.lower():
+            payload["chat_template_kwargs"] = {"enable_thinking": True}
+            payload["reasoning_budget"] = min(max_tokens, 2048)
 
         url = f"{self.base_url.rstrip('/')}/chat/completions"
         async with httpx.AsyncClient(timeout=60.0) as client:
