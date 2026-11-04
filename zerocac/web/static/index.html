@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZeroCAC: Autonomous AI Marketing Agent ($0 CAC)</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Top Navigation -->
+    <header class="app-header">
+      <div class="header-brand">
+        <div class="brand-logo">0</div>
+        <div>
+          <h1 class="brand-title">ZeroCAC</h1>
+          <p class="brand-subtitle">Autonomous Organic Growth Agent</p>
+        </div>
+      </div>
+      <div class="header-badges">
+        <span class="badge badge-success">v0.1.0</span>
+        <span class="badge badge-neutral" id="active-provider-badge">Provider: OpenAI (GPT-6)</span>
+        <a href="https://github.com/PatelDeepB/zerocac" target="_blank" class="github-btn" rel="noreferrer">
+          <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
+            <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+          </svg>
+          GitHub
+        </a>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="app-main">
+      <!-- Intake Card -->
+      <section class="card intake-card">
+        <h2 class="card-heading">Stop Burning Money on Paid Ads</h2>
+        <p class="card-subheading">Enter your landing page URL or describe your product. ZeroCAC analyzes your positioning and deploys 4 compounding organic distribution engines.</p>
+
+        <form id="marketing-form" class="marketing-form">
+          <div class="form-row">
+            <div class="input-group flex-1">
+              <label for="product-url">Product Landing Page URL</label>
+              <input type="url" id="product-url" placeholder="https://yourproduct.com" required>
+            </div>
+            <div class="input-group">
+              <label for="ai-provider-select">AI Reasoning Engine</label>
+              <select id="ai-provider-select">
+                <option value="openai">OpenAI (GPT-6 Astra / Luna)</option>
+                <option value="gemini">Google (Gemini 4 / 3.8 Flash)</option>
+                <option value="claude">Anthropic (Claude 5.5 Opus/Sonnet)</option>
+                <option value="nvidia">NVIDIA NIM (Nemotron 3 Ultra)</option>
+                <option value="deepseek">DeepSeek (V4.1-Flash / R1)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" id="submit-btn" class="btn btn-primary">
+              <span id="btn-text">Deploy Organic Growth Agent</span>
+              <span id="btn-spinner" class="spinner hidden"></span>
+            </button>
+            <button type="button" id="load-demo-btn" class="btn btn-secondary">Load Demo Example</button>
+          </div>
+        </form>
+
+        <!-- Progress Stepper -->
+        <div id="progress-container" class="progress-container hidden">
+          <div class="stepper">
+            <div class="step active" id="step-1">
+              <div class="step-num">1</div>
+              <div class="step-label">Crawl Landing Page</div>
+            </div>
+            <div class="step" id="step-2">
+              <div class="step-num">2</div>
+              <div class="step-label">ICP & Positioning</div>
+            </div>
+            <div class="step" id="step-3">
+              <div class="step-num">3</div>
+              <div class="step-label">Execute 4 Engines</div>
+            </div>
+            <div class="step" id="step-4">
+              <div class="step-num">4</div>
+              <div class="step-label">Campaign Staged</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Results Workspace -->
+      <section id="results-workspace" class="results-workspace hidden">
+        <!-- Navigation Tabs -->
+        <nav class="tabs-nav">
+          <button class="tab-btn active" data-tab="tab-positioning">Positioning & ICP</button>
+          <button class="tab-btn" data-tab="tab-sniper">Intent Sniper (Reddit/HN)</button>
+          <button class="tab-btn" data-tab="tab-aeo">AEO & Comparisons</button>
+          <button class="tab-btn" data-tab="tab-viral">Viral Content</button>
+          <button class="tab-btn" data-tab="tab-directory">100+ Directories</button>
+        </nav>
+
+        <!-- Tab 1: Positioning & ICP -->
+        <div class="tab-content active" id="tab-positioning">
+          <div class="grid-two-cols">
+            <div class="card">
+              <h3 class="section-title">Core Positioning</h3>
+              <div class="meta-item">
+                <span class="meta-label">Product Name:</span>
+                <span class="meta-val" id="profile-name"></span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Category:</span>
+                <span class="meta-val" id="profile-category"></span>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">One Liner:</span>
+                <p class="highlight-box" id="profile-oneliner"></p>
+              </div>
+              <div class="meta-item">
+                <span class="meta-label">Unique Value Proposition:</span>
+                <p class="highlight-box accent-box" id="profile-uvp"></p>
+              </div>
+            </div>
+
+            <div class="card">
+              <h3 class="section-title">Competitor Exploitation Angles</h3>
+              <div id="profile-competitors" class="competitors-list"></div>
+            </div>
+          </div>
+
+          <div class="card margin-top">
+            <h3 class="section-title">Target Buyer Personas (ICP)</h3>
+            <div id="profile-personas" class="personas-grid"></div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Intent Sniper -->
+        <div class="tab-content" id="tab-sniper">
+          <div class="card">
+            <div class="card-header-flex">
+              <div>
+                <h3 class="section-title">Live Social Problem Infiltration</h3>
+                <p class="card-subheading">High-intent buyer discussions on Reddit, Hacker News, and X. Values-first solutions drafted with zero spam.</p>
+              </div>
+            </div>
+            <div id="sniper-container" class="opportunities-list"></div>
+          </div>
+        </div>
+
+        <!-- Tab 3: AEO & Comparisons -->
+        <div class="tab-content" id="tab-aeo">
+          <div class="card">
+            <h3 class="section-title">Answer Engine Optimization (Perplexity & SearchGPT)</h3>
+            <p class="card-subheading">Programmatic comparison guides and structured JSON-LD FAQ schemas designed to rank your product as the canonical recommendation.</p>
+            <div id="aeo-container"></div>
+          </div>
+        </div>
+
+        <!-- Tab 4: Viral Content -->
+        <div class="tab-content" id="tab-viral">
+          <div class="grid-two-cols">
+            <div class="card">
+              <h3 class="section-title">X / Twitter Build-In-Public Thread</h3>
+              <div id="viral-thread-container" class="thread-container"></div>
+            </div>
+            <div class="card">
+              <h3 class="section-title">LinkedIn Document Carousel Script</h3>
+              <div id="viral-carousel-container" class="carousel-container"></div>
+            </div>
+          </div>
+
+          <div class="card margin-top">
+            <h3 class="section-title">60-Second Short-Form Video Script (TikTok / Reels / Shorts)</h3>
+            <pre id="viral-video-container" class="script-box"></pre>
+          </div>
+        </div>
+
+        <!-- Tab 5: 100+ Directories -->
+        <div class="tab-content" id="tab-directory">
+          <div class="card">
+            <h3 class="section-title">Software Directory Submission Packages</h3>
+            <p class="card-subheading">Character-limited taglines, pitches, and maker comments pre-formatted for 30+ top platforms.</p>
+            <div class="table-responsive">
+              <table class="directory-table">
+                <thead>
+                  <tr>
+                    <th>Directory</th>
+                    <th>DA</th>
+                    <th>Tagline (&lt;= 60 chars)</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="directory-tbody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden">Copied to clipboard!</div>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
