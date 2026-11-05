@@ -21,6 +21,7 @@ from zerocac.engines.microtool import MicroToolEngine, MicroToolPackage
 from zerocac.engines.narrative import ViralCampaignPackage, ViralNarrativeEngine
 from zerocac.engines.radar import LiveIntentRadarEngine, RadarReport
 from zerocac.engines.sniper import IntentSniperEngine, SniperCampaign
+from zerocac.engines.virality_loop import ViralityArtifactPackage, ViralityEngine
 
 app = FastAPI(
     title="ZeroCAC API",
@@ -89,6 +90,18 @@ class GeoApiRequest(BaseModel):
     model: Optional[str] = None
 
 
+class ViralityApiRequest(BaseModel):
+    """Payload for generating product-led virality loop assets."""
+
+    profile: Optional[ProductProfile] = None
+    url: Optional[str] = None
+    description: Optional[str] = None
+    product_name: Optional[str] = "Product"
+    dry_run: bool = False
+    provider: Optional[str] = None
+    model: Optional[str] = None
+
+
 class GenerateRequest(BaseModel):
     """Payload for generating organic campaign assets from a ProductProfile."""
 
@@ -112,6 +125,7 @@ class FullCampaignResponse(BaseModel):
     radar: Optional[RadarReport] = None
     microtool: Optional[MicroToolPackage] = None
     geo: Optional[GEOPackage] = None
+    virality: Optional[ViralityArtifactPackage] = None
 
 
 @app.get("/health", tags=["System"])
@@ -251,6 +265,32 @@ async def generate_geo(payload: GeoApiRequest) -> GEOPackage:
     )
 
 
+@app.post("/api/v1/virality", response_model=ViralityArtifactPackage, tags=["Virality"])
+async def generate_virality(payload: ViralityApiRequest) -> ViralityArtifactPackage:
+    """Generate product-led virality loop assets and embeddable badges."""
+    profile = payload.profile
+    if not profile:
+        if not payload.url and not payload.description:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Either 'profile', 'url', or 'description' must be provided.",
+            )
+        analyzer = ProductAnalyzer()
+        profile = await analyzer.analyze_text(
+            description=payload.description or f"Product at {payload.url}",
+            product_name=payload.product_name or "Product",
+            provider_name=payload.provider,
+        )
+
+    engine = ViralityEngine(router=AIRouter())
+    return await engine.generate_package(
+        profile=profile,
+        provider_name=payload.provider,
+        model=payload.model,
+        dry_run=payload.dry_run,
+    )
+
+
 @app.post("/api/v1/generate", response_model=FullCampaignResponse, tags=["Campaigns"])
 async def generate_campaign(payload: GenerateRequest) -> FullCampaignResponse:
     """Execute requested organic growth engines and compile campaign package."""
@@ -291,5 +331,9 @@ async def generate_campaign(payload: GenerateRequest) -> FullCampaignResponse:
     if "geo" in payload.engines:
         geo_engine = PrincetonGEOEngine(router=router)
         response.geo = await geo_engine.generate_package(profile, dry_run=False)
+
+    if "virality" in payload.engines:
+        virality_engine = ViralityEngine(router=router)
+        response.virality = await virality_engine.generate_package(profile, dry_run=False)
 
     return response
