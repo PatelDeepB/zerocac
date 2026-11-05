@@ -16,6 +16,7 @@ from zerocac.config import get_settings
 from zerocac.crawler.scraper import URLScraper
 from zerocac.engines.aeo import AEOEngine, AEOSchemaPackage
 from zerocac.engines.directory import DirectoryEngine, DirectorySubmissionPackage
+from zerocac.engines.geo_optimizer import GEOPackage, PrincetonGEOEngine
 from zerocac.engines.microtool import MicroToolEngine, MicroToolPackage
 from zerocac.engines.narrative import ViralCampaignPackage, ViralNarrativeEngine
 from zerocac.engines.radar import LiveIntentRadarEngine, RadarReport
@@ -76,6 +77,18 @@ class MicroToolApiRequest(BaseModel):
     model: Optional[str] = None
 
 
+class GeoApiRequest(BaseModel):
+    """Payload for generating Princeton GEO citation packages."""
+
+    profile: Optional[ProductProfile] = None
+    url: Optional[str] = None
+    description: Optional[str] = None
+    product_name: Optional[str] = "Product"
+    dry_run: bool = False
+    provider: Optional[str] = None
+    model: Optional[str] = None
+
+
 class GenerateRequest(BaseModel):
     """Payload for generating organic campaign assets from a ProductProfile."""
 
@@ -98,6 +111,7 @@ class FullCampaignResponse(BaseModel):
     directory: Optional[DirectorySubmissionPackage] = None
     radar: Optional[RadarReport] = None
     microtool: Optional[MicroToolPackage] = None
+    geo: Optional[GEOPackage] = None
 
 
 @app.get("/health", tags=["System"])
@@ -211,6 +225,32 @@ async def generate_microtool(payload: MicroToolApiRequest) -> MicroToolPackage:
     )
 
 
+@app.post("/api/v1/geo", response_model=GEOPackage, tags=["GEO"])
+async def generate_geo(payload: GeoApiRequest) -> GEOPackage:
+    """Generate Princeton Generative Engine Optimization citation packages."""
+    profile = payload.profile
+    if not profile:
+        if not payload.url and not payload.description:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Either 'profile', 'url', or 'description' must be provided.",
+            )
+        analyzer = ProductAnalyzer()
+        profile = await analyzer.analyze_text(
+            description=payload.description or f"Product at {payload.url}",
+            product_name=payload.product_name or "Product",
+            provider_name=payload.provider,
+        )
+
+    engine = PrincetonGEOEngine(router=AIRouter())
+    return await engine.generate_package(
+        profile=profile,
+        provider_name=payload.provider,
+        model=payload.model,
+        dry_run=payload.dry_run,
+    )
+
+
 @app.post("/api/v1/generate", response_model=FullCampaignResponse, tags=["Campaigns"])
 async def generate_campaign(payload: GenerateRequest) -> FullCampaignResponse:
     """Execute requested organic growth engines and compile campaign package."""
@@ -247,5 +287,9 @@ async def generate_campaign(payload: GenerateRequest) -> FullCampaignResponse:
     if "microtool" in payload.engines:
         tool_engine = MicroToolEngine(router=router)
         response.microtool = await tool_engine.generate_tool(profile, dry_run=False)
+
+    if "geo" in payload.engines:
+        geo_engine = PrincetonGEOEngine(router=router)
+        response.geo = await geo_engine.generate_package(profile, dry_run=False)
 
     return response

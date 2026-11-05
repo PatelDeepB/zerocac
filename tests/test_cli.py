@@ -82,6 +82,22 @@ def test_cli_microtool_command_generates_files(tmp_path: Path) -> None:
     assert (out_dir / "ad-spend-vs-organic-cac-calculator" / "index.html").exists()
 
 
+def test_cli_geo_command_outputs_panels() -> None:
+    """Ensure `zerocac geo` produces Princeton GEO citation panels."""
+    # Arrange & Act
+    result = runner.invoke(
+        app,
+        ["geo", "--desc", "Autonomous open source customer acquisition engine.", "--dry-run"],
+    )
+
+    # Assert
+    assert result.exit_code == 0
+    assert "GEO Citation Asset" in result.stdout
+    assert "Answer-First" in result.stdout
+    assert "Permissive robots.txt" in result.stdout
+    assert "Bing / ChatGPT Search Action Plan" in result.stdout
+
+
 def test_cli_run_command_exports_campaign_artifacts(tmp_path: Path) -> None:
     """Ensure `zerocac run` compiles all 4 engines and writes files to the target directory."""
     # Arrange

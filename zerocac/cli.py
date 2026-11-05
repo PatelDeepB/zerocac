@@ -18,6 +18,7 @@ from zerocac.config import get_settings
 from zerocac.crawler.scraper import URLScraper
 from zerocac.engines.aeo import AEOEngine
 from zerocac.engines.directory import DirectoryEngine
+from zerocac.engines.geo_optimizer import PrincetonGEOEngine
 from zerocac.engines.microtool import MicroToolEngine
 from zerocac.engines.narrative import ViralNarrativeEngine
 from zerocac.engines.radar import LiveIntentRadarEngine
@@ -230,13 +231,45 @@ def microtool(
 
 
 @app.command()
+def geo(
+    url: Optional[str] = typer.Argument(None, help="Product landing page URL"),
+    description: Optional[str] = typer.Option(None, "--desc", "-d", help="Direct product description"),
+    name: Optional[str] = typer.Option(None, "--name", "-n", help="Product brand name"),
+    provider: Optional[str] = typer.Option(None, "--provider", "-p", help="Target AI provider"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Run with deterministic benchmarks"),
+) -> None:
+    """Generate Princeton GEO citation copy and robots.txt rules for AI search engines."""
+    profile = asyncio.run(_run_analysis(url, description, provider, name))
+    console.print(f"[bold cyan]Engineering Princeton GEO assets for {profile.product_name}...[/bold cyan]")
+
+    engine = PrincetonGEOEngine()
+    package = asyncio.run(engine.generate_package(profile, provider_name=provider, dry_run=dry_run))
+
+    for idx, asset in enumerate(package.assets, start=1):
+        stats_formatted = "\n".join(f"- {s}" for s in asset.statistical_evidence)
+        prompts_formatted = "\n".join(f"- {p}" for p in asset.citation_verification_prompts)
+        console.print(
+            Panel(
+                f"[bold cyan]Target Query:[/bold cyan] {asset.target_query}\n\n"
+                f"[bold green]Answer-First ({asset.word_count} words):[/bold green]\n{asset.answer_first_definition}\n\n"
+                f"[bold yellow]Statistical Evidence:[/bold yellow]\n{stats_formatted}\n\n"
+                f"[bold magenta]Verification Prompts for Perplexity & SearchGPT:[/bold magenta]\n{prompts_formatted}",
+                title=f"GEO Citation Asset #{idx}",
+                border_style="cyan",
+            )
+        )
+    console.print(Panel(package.robots_txt_rules, title="Permissive robots.txt for AI Crawlers", border_style="green"))
+    console.print(Panel(package.bing_webmaster_guidelines, title="Bing / ChatGPT Search Action Plan", border_style="yellow"))
+
+
+@app.command()
 def run(
     url: Optional[str] = typer.Argument(None, help="Product landing page URL"),
     description: Optional[str] = typer.Option(None, "--desc", "-d", help="Direct product description"),
     name: Optional[str] = typer.Option(None, "--name", "-n", help="Product brand name"),
     output_dir: Path = typer.Option(Path("dist_campaign"), "--out", "-o", help="Output directory"),
     provider: Optional[str] = typer.Option(None, "--provider", "-p", help="Target AI provider"),
-    velocity: bool = typer.Option(False, "--velocity", "-v", help="Include real-time Live Radar and Micro-Tools"),
+    velocity: bool = typer.Option(False, "--velocity", "-v", help="Include real-time Live Radar, Micro-Tools, and Princeton GEO"),
 ) -> None:
     """Execute all organic growth engines and export assets to disk."""
     profile = asyncio.run(_run_analysis(url, description, provider, name))
@@ -250,6 +283,7 @@ def run(
 
     radar_pkg = None
     tool_pkg = None
+    geo_pkg = None
     if velocity:
         console.print("[bold cyan]Scanning live feeds via Live Intent Radar...[/bold cyan]")
         radar_engine = LiveIntentRadarEngine(router)
@@ -259,8 +293,12 @@ def run(
         tool_engine = MicroToolEngine(router)
         tool_pkg = asyncio.run(tool_engine.generate_tool(profile, provider_name=provider, dry_run=False))
 
+        console.print("[bold cyan]Generating Princeton GEO citation assets...[/bold cyan]")
+        geo_engine = PrincetonGEOEngine(router)
+        geo_pkg = asyncio.run(geo_engine.generate_package(profile, provider_name=provider, dry_run=False))
+
     output_dir.mkdir(parents=True, exist_ok=True)
-    _save_campaign_artifacts(output_dir, profile, sniper_pkg, aeo_pkg, viral_pkg, dir_pkg, radar_pkg, tool_pkg)
+    _save_campaign_artifacts(output_dir, profile, sniper_pkg, aeo_pkg, viral_pkg, dir_pkg, radar_pkg, tool_pkg, geo_pkg)
     console.print(f"[bold green]Successfully exported complete campaign to: {output_dir.resolve()}[/bold green]")
 
 
@@ -352,6 +390,7 @@ def _save_campaign_artifacts(
     directory: any,
     radar: any = None,
     tool: any = None,
+    geo: any = None,
 ) -> None:
     """Write generated assets to organized files."""
     (out_dir / "profile.json").write_text(profile.model_dump_json(indent=2), encoding="utf-8")
@@ -366,6 +405,12 @@ def _save_campaign_artifacts(
         tools_dir = out_dir / "micro_tools"
         tools_dir.mkdir(parents=True, exist_ok=True)
         MicroToolEngine().export_tool(tool, tools_dir)
+
+    if geo:
+        geo_dir = out_dir / "geo_assets"
+        geo_dir.mkdir(parents=True, exist_ok=True)
+        (geo_dir / "robots.txt").write_text(geo.robots_txt_rules, encoding="utf-8")
+        (geo_dir / "geo_package.json").write_text(geo.model_dump_json(indent=2), encoding="utf-8")
 
     # Export AEO markdown pages
     aeo_dir = out_dir / "aeo_pages"
