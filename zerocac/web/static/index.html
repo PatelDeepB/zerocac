@@ -21,8 +21,8 @@
         </div>
       </div>
       <div class="header-badges">
-        <span class="badge badge-success">v0.1.0</span>
-        <span class="badge badge-neutral" id="active-provider-badge">Provider: OpenAI (GPT-6)</span>
+        <span class="badge badge-success">v0.2.0</span>
+        <span class="badge badge-neutral" id="active-provider-badge">Provider: Frontier Router</span>
         <a href="https://github.com/PatelDeepB/zerocac" target="_blank" class="github-btn" rel="noreferrer">
           <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
             <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
@@ -37,7 +37,7 @@
       <!-- Intake Card -->
       <section class="card intake-card">
         <h2 class="card-heading">Stop Burning Money on Paid Ads</h2>
-        <p class="card-subheading">Enter your landing page URL or describe your product. ZeroCAC analyzes your positioning and deploys 4 compounding organic distribution engines.</p>
+        <p class="card-subheading">Enter your landing page URL or describe your product. ZeroCAC analyzes your positioning and deploys compounding high-velocity organic growth engines.</p>
 
         <form id="marketing-form" class="marketing-form">
           <div class="form-row">
@@ -51,39 +51,39 @@
                 <option value="openai">OpenAI (GPT-6 Astra / Luna)</option>
                 <option value="gemini">Google (Gemini 4 / 3.8 Flash)</option>
                 <option value="claude">Anthropic (Claude 5.5 Opus/Sonnet)</option>
-                <option value="nvidia">NVIDIA NIM (Nemotron 3 Ultra)</option>
+                <option value="nvidia">NVIDIA NIM (Nemotron 3.5)</option>
                 <option value="deepseek">DeepSeek (V4.1-Flash / R1)</option>
               </select>
             </div>
           </div>
 
           <div class="form-actions">
-            <button type="submit" id="submit-btn" class="btn btn-primary">
-              <span id="btn-text">Deploy Organic Growth Agent</span>
+            <button type="submit" class="btn btn-primary" id="submit-btn">
+              <span id="btn-text">Deploy Organic Engines</span>
               <span id="btn-spinner" class="spinner hidden"></span>
             </button>
-            <button type="button" id="load-demo-btn" class="btn btn-secondary">Load Demo Example</button>
+            <button type="button" class="btn btn-secondary" id="load-demo-btn">Load Demo Profile</button>
           </div>
         </form>
 
-        <!-- Progress Stepper -->
+        <!-- Progress Tracker -->
         <div id="progress-container" class="progress-container hidden">
-          <div class="stepper">
-            <div class="step active" id="step-1">
+          <div class="progress-steps">
+            <div class="step" id="step-1">
               <div class="step-num">1</div>
-              <div class="step-label">Crawl Landing Page</div>
+              <div class="step-label">Scraping Page</div>
             </div>
             <div class="step" id="step-2">
               <div class="step-num">2</div>
-              <div class="step-label">ICP & Positioning</div>
+              <div class="step-label">Positioning & ICP</div>
             </div>
             <div class="step" id="step-3">
               <div class="step-num">3</div>
-              <div class="step-label">Execute 4 Engines</div>
+              <div class="step-label">High-Velocity Engines</div>
             </div>
             <div class="step" id="step-4">
               <div class="step-num">4</div>
-              <div class="step-label">Campaign Staged</div>
+              <div class="step-label">Assets Staged</div>
             </div>
           </div>
         </div>
@@ -94,9 +94,13 @@
         <!-- Navigation Tabs -->
         <nav class="tabs-nav">
           <button class="tab-btn active" data-tab="tab-positioning">Positioning & ICP</button>
-          <button class="tab-btn" data-tab="tab-sniper">Intent Sniper (Reddit/HN)</button>
+          <button class="tab-btn" data-tab="tab-radar">Live Intent Radar</button>
+          <button class="tab-btn" data-tab="tab-microtool">Interactive Micro-Tool</button>
+          <button class="tab-btn" data-tab="tab-geo">Princeton GEO</button>
+          <button class="tab-btn" data-tab="tab-virality">Virality Loops</button>
+          <button class="tab-btn" data-tab="tab-sniper">Intent Sniper</button>
           <button class="tab-btn" data-tab="tab-aeo">AEO & Comparisons</button>
-          <button class="tab-btn" data-tab="tab-viral">Viral Content</button>
+          <button class="tab-btn" data-tab="tab-viral">Viral Narrative</button>
           <button class="tab-btn" data-tab="tab-directory">100+ Directories</button>
         </nav>
 
@@ -135,29 +139,121 @@
           </div>
         </div>
 
-        <!-- Tab 2: Intent Sniper -->
+        <!-- Tab 2: Live Intent Radar -->
+        <div class="tab-content" id="tab-radar">
+          <div class="card">
+            <div class="card-header-flex">
+              <div>
+                <h3 class="section-title">Live Intent Radar (Real-Time Pain Interception)</h3>
+                <p class="card-subheading">Scans Reddit, Hacker News, and GitHub Issues for users actively asking for solutions or alternatives right now.</p>
+              </div>
+            </div>
+            <div id="radar-action-box" class="highlight-box accent-box" style="margin-bottom: 1.5rem;"></div>
+            <div id="radar-signals-container" class="opportunities-list"></div>
+          </div>
+        </div>
+
+        <!-- Tab 3: Interactive Micro-Tool -->
+        <div class="tab-content" id="tab-microtool">
+          <div class="card">
+            <h3 class="section-title">Engineering-as-Marketing (Interactive Micro-Tool)</h3>
+            <p class="card-subheading">Standalone zero-dependency web utility engineered to capture Day 2 viral traffic on Hacker News and Product Hunt.</p>
+            <div class="grid-two-cols" style="margin-bottom: 1.5rem;">
+              <div class="highlight-box">
+                <span class="meta-label">Tool Title:</span>
+                <strong id="microtool-name" style="display:block;margin-top:0.25rem;"></strong>
+                <p id="microtool-headline" style="color:var(--text-secondary);font-size:0.9rem;margin-top:0.5rem;"></p>
+              </div>
+              <div class="highlight-box accent-box">
+                <span class="meta-label">Virality & Lead Magnet Hook:</span>
+                <p id="microtool-hook" style="font-size:0.9rem;margin-top:0.5rem;"></p>
+                <div style="margin-top:1rem;display:flex;gap:0.75rem;">
+                  <button type="button" class="btn btn-primary btn-sm" id="download-tool-btn">Download index.html</button>
+                  <button type="button" class="btn btn-secondary btn-sm" id="copy-tool-html-btn">Copy Full HTML</button>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <h4 class="meta-label">One-Minute Deployment Protocol:</h4>
+              <pre id="microtool-deploy" class="script-box" style="margin-top:0.5rem;"></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4: Princeton GEO -->
+        <div class="tab-content" id="tab-geo">
+          <div class="card">
+            <h3 class="section-title">Princeton Generative Engine Optimization (GEO)</h3>
+            <p class="card-subheading">Strict 40-60 word Answer-First definitions, quantitative statistical evidence, and markdown matrices for Perplexity and SearchGPT.</p>
+            <div id="geo-assets-container"></div>
+            <div class="grid-two-cols margin-top">
+              <div class="card">
+                <h4 class="meta-label">Permissive robots.txt for AI Crawlers:</h4>
+                <pre id="geo-robots-container" class="script-box" style="margin-top:0.5rem;"></pre>
+              </div>
+              <div class="card">
+                <h4 class="meta-label">Bing / ChatGPT Search Indexing Checklist:</h4>
+                <pre id="geo-bing-container" class="script-box" style="margin-top:0.5rem;"></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 5: Virality Loops -->
+        <div class="tab-content" id="tab-virality">
+          <div class="grid-two-cols">
+            <div class="card">
+              <h3 class="section-title">Product-Led Virality & K-Factor Loop</h3>
+              <p class="card-subheading">Closed-circuit cycle time mechanics turning customer usage into organic distribution.</p>
+              <div id="virality-mechanics" class="thread-container" style="margin-top:1rem;"></div>
+            </div>
+            <div class="card">
+              <h3 class="section-title">Embeddable Attribution Badges</h3>
+              <div class="highlight-box" style="text-align:center;padding:1.5rem 1rem;">
+                <span class="meta-label" style="display:block;margin-bottom:0.75rem;">Live SVG Badge Preview:</span>
+                <div id="virality-svg-preview"></div>
+              </div>
+              <div style="margin-top:1rem;">
+                <span class="meta-label">Markdown Badge (GitHub README):</span>
+                <div class="code-box-wrapper" style="margin-top:0.25rem;">
+                  <code id="virality-markdown-code" style="font-size:0.8rem;word-break:break-all;"></code>
+                  <button type="button" class="btn btn-secondary btn-sm copy-btn" id="copy-virality-md-btn" data-copy="">Copy MD</button>
+                </div>
+              </div>
+              <div style="margin-top:1rem;">
+                <span class="meta-label">HTML Footer Snippet:</span>
+                <div class="code-box-wrapper" style="margin-top:0.25rem;">
+                  <code id="virality-html-code" style="font-size:0.8rem;word-break:break-all;"></code>
+                  <button type="button" class="btn btn-secondary btn-sm copy-btn" id="copy-virality-html-btn" data-copy="">Copy HTML</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 6: Intent Sniper -->
         <div class="tab-content" id="tab-sniper">
           <div class="card">
             <div class="card-header-flex">
               <div>
-                <h3 class="section-title">Live Social Problem Infiltration</h3>
-                <p class="card-subheading">High-intent buyer discussions on Reddit, Hacker News, and X. Values-first solutions drafted with zero spam.</p>
+                <h3 class="section-title">Synthetic Intent Scenarios</h3>
+                <p class="card-subheading">Pre-modeled community pain queries and value-first responses for proactive outreach.</p>
               </div>
             </div>
             <div id="sniper-container" class="opportunities-list"></div>
           </div>
         </div>
 
-        <!-- Tab 3: AEO & Comparisons -->
+        <!-- Tab 7: AEO & Comparisons -->
         <div class="tab-content" id="tab-aeo">
           <div class="card">
-            <h3 class="section-title">Answer Engine Optimization (Perplexity & SearchGPT)</h3>
+            <h3 class="section-title">AEO Comparison Pages & Schemas</h3>
             <p class="card-subheading">Programmatic comparison guides and structured JSON-LD FAQ schemas designed to rank your product as the canonical recommendation.</p>
             <div id="aeo-container"></div>
           </div>
         </div>
 
-        <!-- Tab 4: Viral Content -->
+        <!-- Tab 8: Viral Content -->
         <div class="tab-content" id="tab-viral">
           <div class="grid-two-cols">
             <div class="card">
@@ -176,7 +272,7 @@
           </div>
         </div>
 
-        <!-- Tab 5: 100+ Directories -->
+        <!-- Tab 9: 100+ Directories -->
         <div class="tab-content" id="tab-directory">
           <div class="card">
             <h3 class="section-title">Software Directory Submission Packages</h3>

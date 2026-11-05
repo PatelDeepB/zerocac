@@ -12,6 +12,8 @@ document.addEventListener("DOMContentLoaded", () => {
   const resultsWorkspace = document.getElementById("results-workspace");
   const toast = document.getElementById("toast");
 
+  let latestMicroToolHtml = "";
+
   // Tab switching
   const tabBtns = document.querySelectorAll(".tab-btn");
   const tabContents = document.querySelectorAll(".tab-content");
@@ -60,14 +62,14 @@ document.addEventListener("DOMContentLoaded", () => {
       const profile = await analyzeRes.json();
       renderPositioningTab(profile);
 
-      // Step 3: Generate 4 engines
+      // Step 3: Generate all organic & high-velocity engines
       setProgress(3);
       const generateRes = await fetch("/api/v1/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           profile: profile,
-          engines: ["sniper", "aeo", "narrative", "directory"],
+          engines: ["sniper", "aeo", "narrative", "directory", "radar", "microtool", "geo", "virality"],
           provider: provider,
         }),
       });
@@ -82,7 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setProgress(4);
       resultsWorkspace.classList.remove("hidden");
       resultsWorkspace.scrollIntoView({ behavior: "smooth" });
-      showToast("Organic marketing campaigns staged successfully!");
+      showToast("High-velocity organic engines deployed!");
     } catch (err) {
       console.error(err);
       showToast(`Error: ${err.message}`);
@@ -106,12 +108,12 @@ document.addEventListener("DOMContentLoaded", () => {
   function setLoading(isLoading) {
     if (isLoading) {
       submitBtn.disabled = true;
+      btnText.textContent = "Synthesizing Growth Strategy...";
       btnSpinner.classList.remove("hidden");
-      btnText.textContent = "Deploying Autonomous Agent...";
     } else {
       submitBtn.disabled = false;
+      btnText.textContent = "Deploy Organic Engines";
       btnSpinner.classList.add("hidden");
-      btnText.textContent = "Deploy Organic Growth Agent";
     }
   }
 
@@ -122,81 +124,209 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("profile-uvp").textContent = profile.unique_value_proposition;
 
     // Competitors
-    const compBox = document.getElementById("profile-competitors");
-    compBox.innerHTML = "";
+    const compContainer = document.getElementById("profile-competitors");
+    compContainer.innerHTML = "";
     profile.competitor_gaps.forEach((gap) => {
-      const el = document.createElement("div");
-      el.className = "competitor-card";
-      el.innerHTML = `
-        <div class="competitor-name">Target: ${gap.competitor_name}</div>
-        <p style="font-size: 0.85rem; color: var(--text-secondary);">Weakness: ${gap.their_weakness}</p>
-        <p style="font-size: 0.85rem; color: var(--accent-primary); margin-top: 0.25rem;">Our Edge: ${gap.our_advantage}</p>
+      const card = document.createElement("div");
+      card.className = "competitor-item";
+      card.innerHTML = `
+        <div class="competitor-name">vs ${escapeHtml(gap.competitor_name)}</div>
+        <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">
+          <strong style="color: var(--accent-warning);">Incumbent Flaw:</strong> ${escapeHtml(gap.their_weakness)}
+        </div>
+        <div style="font-size: 0.85rem; color: var(--accent-primary); margin-top: 0.25rem;">
+          <strong>Our Advantage:</strong> ${escapeHtml(gap.our_advantage)}
+        </div>
       `;
-      compBox.appendChild(el);
+      compContainer.appendChild(card);
     });
 
     // Personas
-    const personasBox = document.getElementById("profile-personas");
-    personasBox.innerHTML = "";
-    profile.personas.forEach((p) => {
-      const el = document.createElement("div");
-      el.className = "persona-card";
-      el.innerHTML = `
-        <div class="persona-title">${p.persona_name}</div>
-        <p style="font-size: 0.85rem; margin-bottom: 0.4rem;"><strong>Core Agony:</strong> ${p.core_pain_point}</p>
-        <p style="font-size: 0.85rem; margin-bottom: 0.4rem;"><strong>Trigger Event:</strong> ${p.trigger_event}</p>
-        <p style="font-size: 0.85rem; color: var(--text-muted);">Watering Holes: ${p.watering_holes.join(", ")}</p>
+    const personaContainer = document.getElementById("profile-personas");
+    personaContainer.innerHTML = "";
+    profile.personas.forEach((persona) => {
+      const card = document.createElement("div");
+      card.className = "persona-card";
+      card.innerHTML = `
+        <div class="persona-role">${escapeHtml(persona.persona_name)}</div>
+        <div class="meta-item" style="margin-top: 0.5rem;">
+          <span class="meta-label">Core Pain Point:</span>
+          <span style="font-size: 0.85rem; color: var(--text-primary);">${escapeHtml(persona.core_pain_point)}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Trigger Event:</span>
+          <span style="font-size: 0.85rem; color: var(--text-secondary);">${escapeHtml(persona.trigger_event)}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">Primary Objection:</span>
+          <span style="font-size: 0.85rem; color: var(--text-muted);">${escapeHtml(persona.primary_objection)}</span>
+        </div>
       `;
-      personasBox.appendChild(el);
+      personaContainer.appendChild(card);
     });
   }
 
   function renderAllEngines(campaign) {
-    // 1. Sniper
-    if (campaign.sniper) {
-      const container = document.getElementById("sniper-container");
-      container.innerHTML = "";
-      campaign.sniper.opportunities.forEach((opp) => {
-        const el = document.createElement("div");
-        el.className = "opportunity-card";
-        el.innerHTML = `
+    // 1. Live Intent Radar
+    if (campaign.radar) {
+      document.getElementById("radar-action-box").textContent = campaign.radar.action_plan;
+      const radarContainer = document.getElementById("radar-signals-container");
+      radarContainer.innerHTML = "";
+      campaign.radar.high_intent_signals.forEach((sig) => {
+        const item = document.createElement("div");
+        item.className = "opportunity-item";
+        item.innerHTML = `
           <div class="opportunity-header">
             <div>
-              <strong>${opp.platform} (${opp.community})</strong>
-              <div style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.2rem;">${opp.thread_title}</div>
+              <span class="platform-badge platform-${sig.source.toLowerCase().replace(/[^a-z]/g, "")}">${escapeHtml(sig.source)}</span>
+              <span style="font-size: 0.85rem; color: var(--text-muted); margin-left: 0.5rem;">by ${escapeHtml(sig.author)} (${escapeHtml(sig.created_at)})</span>
             </div>
-            <span class="intent-badge">${opp.intent_score}% Intent</span>
+            <div class="intent-score">Score: ${sig.intent_score}/100</div>
           </div>
-          <div class="response-draft-box">${escapeHtml(opp.draft_response)}</div>
-          <div style="display: flex; justify-content: space-between; align-items: center;">
-            <span style="font-size: 0.75rem; color: var(--text-muted);">Angle: ${opp.organic_mention_angle}</span>
-            <button class="btn btn-secondary btn-sm copy-btn" data-copy="${escapeAttr(opp.draft_response)}">Copy Answer</button>
+          <div style="font-weight: 600; margin-top: 0.5rem; font-size: 0.95rem;">
+            <a href="${escapeAttr(sig.url)}" target="_blank" rel="noreferrer" style="color:var(--text-primary);text-decoration:none;">${escapeHtml(sig.title)}</a>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); margin-top: 0.25rem;">${escapeHtml(sig.content_snippet)}</p>
+          <div class="draft-response-box">
+            <span class="meta-label">Recommended Authentic Solution:</span>
+            <p style="margin-top: 0.25rem;">${escapeHtml(sig.recommended_reply)}</p>
+            <div style="margin-top: 0.5rem;">
+              <button type="button" class="btn btn-secondary btn-sm copy-btn" data-copy="${escapeAttr(sig.recommended_reply)}">Copy Reply</button>
+            </div>
           </div>
         `;
-        container.appendChild(el);
+        radarContainer.appendChild(item);
       });
     }
 
-    // 2. AEO
+    // 2. Interactive Micro-Tool
+    if (campaign.microtool) {
+      const tool = campaign.microtool;
+      latestMicroToolHtml = tool.html_content;
+      document.getElementById("microtool-name").textContent = tool.concept.tool_name;
+      document.getElementById("microtool-headline").textContent = tool.concept.headline;
+      document.getElementById("microtool-hook").textContent = tool.concept.virality_hook;
+      document.getElementById("microtool-deploy").textContent = tool.deployment_instructions;
+
+      document.getElementById("copy-tool-html-btn").onclick = () => {
+        navigator.clipboard.writeText(latestMicroToolHtml);
+        showToast("Copied standalone HTML to clipboard!");
+      };
+
+      document.getElementById("download-tool-btn").onclick = () => {
+        const blob = new Blob([latestMicroToolHtml], { type: "text/html" });
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = `${tool.concept.slug}.html`;
+        a.click();
+        showToast("Downloaded index.html!");
+      };
+    }
+
+    // 3. Princeton GEO
+    if (campaign.geo) {
+      const geoBox = document.getElementById("geo-assets-container");
+      geoBox.innerHTML = "";
+      campaign.geo.assets.forEach((asset, idx) => {
+        const card = document.createElement("div");
+        card.className = "card";
+        card.style.marginBottom = "1rem";
+        const statsList = asset.statistical_evidence.map((s) => `<li>${escapeHtml(s)}</li>`).join("");
+        const promptsList = asset.citation_verification_prompts.map((p) => `<li><code>${escapeHtml(p)}</code></li>`).join("");
+        card.innerHTML = `
+          <h4 style="color:var(--accent-secondary);font-size:0.95rem;">Target Query: ${escapeHtml(asset.target_query)}</h4>
+          <div class="highlight-box accent-box" style="margin-top:0.75rem;">
+            <span class="meta-label">Answer-First Definition (${asset.word_count} words):</span>
+            <p style="margin-top:0.25rem;line-height:1.5;">${escapeHtml(asset.answer_first_definition)}</p>
+          </div>
+          <div style="margin-top:0.75rem;">
+            <span class="meta-label">Statistical Evidence:</span>
+            <ul style="padding-left:1.25rem;font-size:0.85rem;color:var(--text-secondary);margin-top:0.25rem;">${statsList}</ul>
+          </div>
+          <div style="margin-top:0.75rem;">
+            <span class="meta-label">Citation Verification Prompts (for Perplexity / SearchGPT):</span>
+            <ul style="padding-left:1.25rem;font-size:0.85rem;margin-top:0.25rem;">${promptsList}</ul>
+          </div>
+        `;
+        geoBox.appendChild(card);
+      });
+
+      document.getElementById("geo-robots-container").textContent = campaign.geo.robots_txt_rules;
+      document.getElementById("geo-bing-container").textContent = campaign.geo.bing_webmaster_guidelines;
+    }
+
+    // 4. Virality Loops
+    if (campaign.virality) {
+      const v = campaign.virality;
+      const mechBox = document.getElementById("virality-mechanics");
+      mechBox.innerHTML = "";
+      v.viral_loop_mechanics.forEach((step) => {
+        const d = document.createElement("div");
+        d.className = "highlight-box";
+        d.style.marginBottom = "0.5rem";
+        d.textContent = step;
+        mechBox.appendChild(d);
+      });
+
+      document.getElementById("virality-svg-preview").innerHTML = v.svg_badge;
+      document.getElementById("virality-markdown-code").textContent = v.markdown_badge;
+      document.getElementById("copy-virality-md-btn").setAttribute("data-copy", v.markdown_badge);
+
+      document.getElementById("virality-html-code").textContent = v.html_badge_snippet;
+      document.getElementById("copy-virality-html-btn").setAttribute("data-copy", v.html_badge_snippet);
+    }
+
+    // 5. Intent Sniper
+    if (campaign.sniper) {
+      const sniperContainer = document.getElementById("sniper-container");
+      sniperContainer.innerHTML = "";
+      campaign.sniper.opportunities.forEach((opp) => {
+        const item = document.createElement("div");
+        item.className = "opportunity-item";
+        item.innerHTML = `
+          <div class="opportunity-header">
+            <div>
+              <span class="platform-badge platform-${opp.platform.toLowerCase().replace(/[^a-z]/g, "")}">${escapeHtml(opp.platform)}</span>
+              <span style="font-size: 0.85rem; color: var(--text-muted); margin-left: 0.5rem;">${escapeHtml(opp.community)}</span>
+            </div>
+            <div class="intent-score">Intent: ${opp.intent_score}/100</div>
+          </div>
+          <div style="font-weight: 600; margin-top: 0.5rem; font-size: 0.95rem;">"${escapeHtml(opp.thread_title)}"</div>
+          <div class="draft-response-box">
+            <span class="meta-label">Authentic Solution:</span>
+            <p style="margin-top: 0.25rem;">${escapeHtml(opp.draft_response)}</p>
+            <div style="margin-top: 0.5rem;">
+              <button type="button" class="btn btn-secondary btn-sm copy-btn" data-copy="${escapeAttr(opp.draft_response)}">Copy Response</button>
+            </div>
+          </div>
+        `;
+        sniperContainer.appendChild(item);
+      });
+    }
+
+    // 6. AEO Pages
     if (campaign.aeo) {
-      const container = document.getElementById("aeo-container");
-      container.innerHTML = "";
+      const aeoBox = document.getElementById("aeo-container");
+      aeoBox.innerHTML = "";
       campaign.aeo.comparison_pages.forEach((page) => {
-        const el = document.createElement("div");
-        el.className = "card";
-        el.style.marginBottom = "1rem";
-        el.innerHTML = `
-          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
-            <h4>${page.title}</h4>
-            <button class="btn btn-secondary btn-sm copy-btn" data-copy="${escapeAttr(page.markdown_content)}">Copy Markdown</button>
+        const item = document.createElement("div");
+        item.className = "card";
+        item.style.marginBottom = "1rem";
+        item.innerHTML = `
+          <div class="card-header-flex">
+            <div>
+              <h4 style="color: var(--accent-primary); font-size: 1rem;">vs ${escapeHtml(page.target_competitor)}</h4>
+              <p style="font-size: 0.85rem; color: var(--text-muted);">Slug: <code>${escapeHtml(page.slug)}</code></p>
+            </div>
+            <button type="button" class="btn btn-secondary btn-sm copy-btn" data-copy="${escapeAttr(page.markdown_content)}">Copy Markdown</button>
           </div>
-          <pre class="script-box" style="max-height: 200px; overflow-y: auto;">${escapeHtml(page.markdown_content)}</pre>
+          <pre class="script-box" style="margin-top: 0.75rem;">${escapeHtml(page.markdown_content.substring(0, 450))}...</pre>
         `;
-        container.appendChild(el);
+        aeoBox.appendChild(item);
       });
     }
 
-    // 3. Viral
+    // 7. Viral Content
     if (campaign.narrative) {
       const threadBox = document.getElementById("viral-thread-container");
       threadBox.innerHTML = "";
@@ -221,31 +351,33 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("viral-video-container").textContent = campaign.narrative.video_script_60s;
     }
 
-    // 4. Directory
+    // 8. Directory
     if (campaign.directory) {
       const tbody = document.getElementById("directory-tbody");
       tbody.innerHTML = "";
       campaign.directory.listings.forEach((listing) => {
         const tr = document.createElement("tr");
         tr.innerHTML = `
-          <td><strong>${listing.directory_name}</strong></td>
+          <td><strong>${escapeHtml(listing.directory_name)}</strong></td>
           <td><span class="badge badge-success">DA ${listing.domain_authority}</span></td>
-          <td style="font-family: var(--font-mono); font-size: 0.8rem;">${listing.tagline}</td>
+          <td style="font-family: var(--font-mono); font-size: 0.8rem;">${escapeHtml(listing.tagline)}</td>
           <td>
-            <a href="${listing.submission_url}" target="_blank" rel="noreferrer" class="btn btn-secondary btn-sm">Submit</a>
+            <a href="${escapeAttr(listing.submission_url)}" target="_blank" rel="noreferrer" class="btn btn-secondary btn-sm">Submit</a>
           </td>
         `;
         tbody.appendChild(tr);
       });
     }
 
-    // Bind copy buttons
+    // Bind all copy buttons
     document.querySelectorAll(".copy-btn").forEach((btn) => {
-      btn.addEventListener("click", () => {
+      btn.onclick = () => {
         const text = btn.getAttribute("data-copy");
-        navigator.clipboard.writeText(text);
-        showToast("Copied to clipboard!");
-      });
+        if (text) {
+          navigator.clipboard.writeText(text);
+          showToast("Copied to clipboard!");
+        }
+      };
     });
   }
 
@@ -258,10 +390,12 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function escapeHtml(str) {
-    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    if (!str) return "";
+    return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
 
   function escapeAttr(str) {
-    return str.replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+    if (!str) return "";
+    return String(str).replace(/"/g, "&quot;").replace(/'/g, "&#39;");
   }
 });
