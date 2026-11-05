@@ -24,6 +24,8 @@ from zerocac.engines.narrative import ViralNarrativeEngine
 from zerocac.engines.radar import LiveIntentRadarEngine
 from zerocac.engines.sniper import IntentSniperEngine
 from zerocac.engines.virality_loop import ViralityEngine
+from zerocac.deployers.manager import EdgeDeploymentManager
+from zerocac.deployers.models import DeploymentArtifact, DeploymentProvider
 
 app = typer.Typer(
     name="zerocac",
@@ -288,6 +290,85 @@ def virality(
             border_style="green",
         )
     )
+
+
+
+@app.command()
+def deploy(
+    file_path: Optional[str] = typer.Option(None, "--file", "-f", help="Path to standalone HTML tool to deploy"),
+    slug: Optional[str] = typer.Option(None, "--slug", "-s", help="Unique project slug"),
+    title: Optional[str] = typer.Option(None, "--title", "-t", help="Deployment display title"),
+    url: Optional[str] = typer.Option(None, "--url", "-u", help="Product URL to generate and deploy micro-tool for"),
+    provider: str = typer.Option("cloudflare_pages", "--provider", "-p", help="Provider: cloudflare_pages or local_preview"),
+    no_index: bool = typer.Option(False, "--no-index", help="Skip IndexNow instant search indexing"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Run in simulated dry-run mode"),
+) -> None:
+    """Deploy a generated micro-tool or GEO page to live edge hosting with instant search indexing."""
+    html_content = ""
+    project_slug = slug or "zerocac-asset"
+    display_title = title or project_slug.replace("-", " ").title()
+
+    if file_path:
+        path_obj = Path(file_path)
+        if not path_obj.exists():
+            console.print(f"[bold red]Error: File not found at {file_path}[/bold red]")
+            raise typer.Exit(code=1)
+        html_content = path_obj.read_text(encoding="utf-8")
+        if not slug:
+            project_slug = path_obj.stem
+            display_title = title or project_slug.replace("-", " ").title()
+    elif url:
+        console.print(f"[bold cyan]Generating micro-tool for {url} to deploy...[/bold cyan]")
+        profile = asyncio.run(_run_analysis(url=url, desc=None, provider=None))
+        engine = MicroToolEngine()
+        pkg = asyncio.run(engine.generate_tool(profile, dry_run=dry_run))
+        html_content = pkg.standalone_html
+        project_slug = slug or pkg.slug
+        display_title = title or pkg.tool_title
+    else:
+        console.print("[bold red]Error: Either --file or --url must be provided.[/bold red]")
+        raise typer.Exit(code=1)
+
+    artifact = DeploymentArtifact(
+        project_slug=project_slug,
+        title=display_title,
+        html_content=html_content,
+        robots_txt="User-agent: *\nAllow: /\n",
+        sitemap_xml=f'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n  <url><loc>https://{project_slug}.pages.dev/</loc></url>\n</urlset>',
+    )
+
+    console.print(f"[bold yellow]Deploying {project_slug} to edge ({provider})...[/bold yellow]")
+    manager = EdgeDeploymentManager()
+    target_provider = (
+        DeploymentProvider.CLOUDFLARE_PAGES
+        if provider == "cloudflare_pages"
+        else DeploymentProvider.LOCAL_PREVIEW
+    )
+    result = asyncio.run(
+        manager.deploy_and_index(
+            artifact=artifact,
+            provider=target_provider,
+            enable_indexing=not no_index,
+            dry_run=dry_run,
+        )
+    )
+
+    if not result.success:
+        console.print(f"[bold red]Deployment failed:[/bold red] {result.error_message}")
+        raise typer.Exit(code=1)
+
+    table = Table(title="Autonomous Edge Deployment Summary", border_style="green")
+    table.add_column("Property", style="bold cyan")
+    table.add_column("Value", style="green")
+    table.add_row("Deployment ID", result.deployment_id)
+    table.add_row("Live Edge URL", result.live_url)
+    table.add_row("Hosting Target", result.provider.value)
+    table.add_row(
+        "IndexNow Search Ping",
+        "[bold green]Dispatched[/bold green]" if result.indexnow_submitted else "[dim]Skipped[/dim]",
+    )
+    table.add_row("Indexed URLs", ", ".join(result.indexed_urls) or "None")
+    console.print(table)
 
 
 @app.command()

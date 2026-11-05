@@ -22,12 +22,15 @@ from zerocac.engines.narrative import ViralCampaignPackage, ViralNarrativeEngine
 from zerocac.engines.radar import LiveIntentRadarEngine, RadarReport
 from zerocac.engines.sniper import IntentSniperEngine, SniperCampaign
 from zerocac.engines.virality_loop import ViralityArtifactPackage, ViralityEngine
+from zerocac.web.routers.deploy import router as deploy_router
 
 app = FastAPI(
     title="ZeroCAC API",
     description="Autonomous AI Marketing Agent that scales products to $0 CAC",
     version=__version__,
 )
+
+app.include_router(deploy_router)
 
 app.add_middleware(
     CORSMiddleware,
