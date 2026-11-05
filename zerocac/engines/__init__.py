@@ -6,6 +6,11 @@ from zerocac.engines.directory import (
     DirectoryListing,
     DirectorySubmissionPackage,
 )
+from zerocac.engines.geo_optimizer import (
+    GEOCitationAsset,
+    GEOPackage,
+    PrincetonGEOEngine,
+)
 from zerocac.engines.microtool import (
     MicroToolConcept,
     MicroToolEngine,
@@ -35,12 +40,15 @@ __all__ = [
     "DirectoryEngine",
     "DirectoryListing",
     "DirectorySubmissionPackage",
+    "GEOCitationAsset",
+    "GEOPackage",
     "IntentSniperEngine",
     "LiveIntentRadarEngine",
     "LiveIntentSignal",
     "MicroToolConcept",
     "MicroToolEngine",
     "MicroToolPackage",
+    "PrincetonGEOEngine",
     "RadarReport",
     "RadarSignalSource",
     "SniperCampaign",

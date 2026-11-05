@@ -106,6 +106,27 @@ def test_microtool_endpoint_returns_html_package() -> None:
     assert "Quick Deployment Guide" in data["deployment_instructions"]
 
 
+def test_geo_endpoint_returns_citation_package() -> None:
+    """Ensure POST /api/v1/geo produces Princeton GEO citation package."""
+    # Arrange
+    payload = {
+        "product_name": "ZeroCAC",
+        "description": "Autonomous AI agent that scales products to $0 CAC without paid ads.",
+        "dry_run": True,
+    }
+
+    # Act
+    response = client.post("/api/v1/geo", json=payload)
+
+    # Assert
+    assert response.status_code == 200
+    data = response.json()
+    assert data["product_name"] == "ZeroCAC"
+    assert "PerplexityBot" in data["robots_txt_rules"]
+    assert len(data["assets"]) >= 1
+    assert "ZeroCAC" in data["assets"][0]["answer_first_definition"]
+
+
 def test_generate_endpoint_produces_full_campaign() -> None:
     """Ensure POST /api/v1/generate compiles outputs across all requested organic engines."""
     # Arrange
