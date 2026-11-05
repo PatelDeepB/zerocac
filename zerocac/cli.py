@@ -26,6 +26,10 @@ from zerocac.engines.sniper import IntentSniperEngine
 from zerocac.engines.virality_loop import ViralityEngine
 from zerocac.deployers.manager import EdgeDeploymentManager
 from zerocac.deployers.models import DeploymentArtifact, DeploymentProvider
+from zerocac.leads.dispatcher import ResendDispatcher
+from zerocac.leads.models import LeadStatus
+from zerocac.leads.nurture import NurtureEngine
+from zerocac.leads.repository import LeadRepository
 
 app = typer.Typer(
     name="zerocac",
@@ -369,6 +373,80 @@ def deploy(
     )
     table.add_row("Indexed URLs", ", ".join(result.indexed_urls) or "None")
     console.print(table)
+
+
+@app.command(name="leads")
+def list_leads(
+    project: Optional[str] = typer.Option(None, "--project", "-p", help="Filter by project slug"),
+    limit: int = typer.Option(50, "--limit", "-l", help="Maximum leads to return"),
+) -> None:
+    """List captured inbound leads and their nurture status."""
+    repo = LeadRepository()
+    leads = asyncio.run(repo.list_leads(project_slug=project, limit=limit))
+
+    if not leads:
+        console.print("[yellow]No leads captured yet. Deploy micro-tools to acquire leads.[/yellow]")
+        return
+
+    table = Table(title="Inbound Lead Pipeline ($0 CAC)", border_style="cyan")
+    table.add_column("Lead ID", style="dim")
+    table.add_column("Email", style="bold green")
+    table.add_column("Name", style="white")
+    table.add_column("Project", style="cyan")
+    table.add_column("Intent", style="bold yellow")
+    table.add_column("Status", style="magenta")
+    table.add_column("Captured At", style="dim")
+
+    for lead in leads:
+        table.add_row(
+            lead.lead_id,
+            str(lead.email),
+            lead.full_name or "-",
+            lead.project_slug,
+            str(lead.intent_score),
+            lead.status.value.upper(),
+            lead.created_at[:10],
+        )
+    console.print(table)
+
+
+@app.command(name="nurture")
+def execute_nurture(
+    lead_id: str = typer.Argument(..., help="Lead identifier to nurture"),
+    product: str = typer.Option("ZeroCAC", "--product", "-p", help="Product brand name"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Simulate email sending"),
+) -> None:
+    """Generate and dispatch personalized behavioral nurture sequence for a lead."""
+    repo = LeadRepository()
+    lead = asyncio.run(repo.get_lead(lead_id))
+    if not lead:
+        console.print(f"[bold red]Error: Lead '{lead_id}' not found.[/bold red]")
+        raise typer.Exit(code=1)
+
+    profile = ProductProfile(
+        product_name=product,
+        category="Growth Engine",
+        one_liner="Scale to $0 CAC without ad burn",
+        core_problem="Paid ad fatigue",
+        solution_mechanism="Autonomous micro-tools and GEO assets",
+        unique_value_proposition="Compounding zero-cost distribution",
+        key_features=["Micro-tools", "Live Radar"],
+    )
+
+    engine = NurtureEngine()
+    sequence = engine.build_default_sequence(lead, profile)
+    dispatcher = ResendDispatcher()
+
+    console.print(f"[bold cyan]Synthesized 3-Stage Nurture Sequence for {lead.email}...[/bold cyan]")
+    for stage in sequence.stages:
+        console.print(f"  - Stage {stage.step} (+{stage.delay_hours}h): [bold green]{stage.subject}[/bold green]")
+
+    res = asyncio.run(dispatcher.dispatch_stage(sequence.stages[0], str(lead.email), dry_run=dry_run))
+    if res.get("success"):
+        asyncio.run(repo.update_status(lead.lead_id, LeadStatus.NURTURED))
+        console.print(f"[bold green]Successfully dispatched Stage 1 to {lead.email}![/bold green] (ID: {res.get('id')})")
+    else:
+        console.print(f"[bold red]Dispatch failed:[/bold red] {res.get('error')}")
 
 
 @app.command()

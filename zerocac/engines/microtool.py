@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field
 from zerocac.ai.base import LLMMessage
 from zerocac.ai.router import AIRouter
 from zerocac.analyzer.models import ProductProfile
+from zerocac.leads.injector import LeadCaptureInjector
 
 logger = logging.getLogger(__name__)
 
@@ -51,7 +52,8 @@ class MicroToolEngine:
             return self._generate_dry_run_tool(profile)
 
         concept = await self._discover_concept(profile, provider_name, model)
-        html_content = await self._compile_html_application(profile, concept, provider_name, model)
+        raw_html = await self._compile_html_application(profile, concept, provider_name, model)
+        html_content = LeadCaptureInjector().inject_lead_form(raw_html)
 
         return MicroToolPackage(
             concept=concept,
@@ -174,7 +176,8 @@ class MicroToolEngine:
     def _generate_dry_run_tool(self, profile: ProductProfile) -> MicroToolPackage:
         """Deterministic tool package for test suites and offline verification."""
         concept = self._build_default_concept(profile)
-        html_content = self._generate_fallback_html(profile, concept)
+        raw_html = self._generate_fallback_html(profile, concept)
+        html_content = LeadCaptureInjector().inject_lead_form(raw_html)
         return MicroToolPackage(
             concept=concept,
             html_content=html_content,
