@@ -6,7 +6,7 @@ from fastapi import FastAPI, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, Field
 
 from zerocac import __version__
 from zerocac.ai.router import AIRouter
@@ -17,6 +17,7 @@ from zerocac.crawler.scraper import URLScraper
 from zerocac.engines.aeo import AEOEngine, AEOSchemaPackage
 from zerocac.engines.directory import DirectoryEngine, DirectorySubmissionPackage
 from zerocac.engines.narrative import ViralCampaignPackage, ViralNarrativeEngine
+from zerocac.engines.radar import LiveIntentRadarEngine, RadarReport
 from zerocac.engines.sniper import IntentSniperEngine, SniperCampaign
 
 app = FastAPI(
@@ -49,6 +50,19 @@ class AnalyzeRequest(BaseModel):
     model: Optional[str] = Field(default=None, description="Optional target model identifier")
 
 
+class RadarApiRequest(BaseModel):
+    """Payload for running live intent radar scan."""
+
+    profile: Optional[ProductProfile] = None
+    url: Optional[str] = None
+    description: Optional[str] = None
+    product_name: Optional[str] = "Product"
+    keywords: Optional[List[str]] = None
+    limit_per_source: int = 4
+    dry_run: bool = False
+    provider: Optional[str] = None
+
+
 class GenerateRequest(BaseModel):
     """Payload for generating organic campaign assets from a ProductProfile."""
 
@@ -69,6 +83,7 @@ class FullCampaignResponse(BaseModel):
     aeo: Optional[AEOSchemaPackage] = None
     narrative: Optional[ViralCampaignPackage] = None
     directory: Optional[DirectorySubmissionPackage] = None
+    radar: Optional[RadarReport] = None
 
 
 @app.get("/health", tags=["System"])
@@ -131,6 +146,32 @@ async def analyze_product(payload: AnalyzeRequest) -> ProductProfile:
     )
 
 
+@app.post("/api/v1/radar", response_model=RadarReport, tags=["Radar"])
+async def run_radar(payload: RadarApiRequest) -> RadarReport:
+    """Execute live intent radar scan for real-time buyer pain discussions."""
+    profile = payload.profile
+    if not profile:
+        if not payload.url and not payload.description:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Either 'profile', 'url', or 'description' must be provided.",
+            )
+        analyzer = ProductAnalyzer()
+        profile = await analyzer.analyze_text(
+            description=payload.description or f"Product at {payload.url}",
+            product_name=payload.product_name or "Product",
+            provider_name=payload.provider,
+        )
+
+    radar_engine = LiveIntentRadarEngine(router=AIRouter())
+    return await radar_engine.scan_live_feeds(
+        profile=profile,
+        keywords=payload.keywords,
+        limit_per_source=payload.limit_per_source,
+        dry_run=payload.dry_run,
+    )
+
+
 @app.post("/api/v1/generate", response_model=FullCampaignResponse, tags=["Campaigns"])
 async def generate_campaign(payload: GenerateRequest) -> FullCampaignResponse:
     """Execute requested organic growth engines and compile campaign package."""
@@ -159,5 +200,9 @@ async def generate_campaign(payload: GenerateRequest) -> FullCampaignResponse:
     if "directory" in payload.engines:
         dir_engine = DirectoryEngine()
         response.directory = dir_engine.generate_package(profile)
+
+    if "radar" in payload.engines:
+        radar_engine = LiveIntentRadarEngine(router=router)
+        response.radar = await radar_engine.scan_live_feeds(profile, dry_run=False)
 
     return response

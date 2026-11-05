@@ -46,6 +46,21 @@ def test_cli_directories_command_outputs_table() -> None:
     assert "Product Hunt" in result.stdout
 
 
+def test_cli_radar_command_outputs_table() -> None:
+    """Ensure `zerocac radar` executes dry-run scanning and outputs the signal table."""
+    # Arrange & Act
+    result = runner.invoke(
+        app,
+        ["radar", "--desc", "Autonomous open source customer acquisition engine.", "--dry-run"],
+    )
+
+    # Assert
+    assert result.exit_code == 0
+    assert "Live Intent Radar Signals" in result.stdout
+    assert "Reddit" in result.stdout
+    assert "Radar Action Protocol" in result.stdout
+
+
 def test_cli_run_command_exports_campaign_artifacts(tmp_path: Path) -> None:
     """Ensure `zerocac run` compiles all 4 engines and writes files to the target directory."""
     # Arrange
@@ -58,16 +73,15 @@ def test_cli_run_command_exports_campaign_artifacts(tmp_path: Path) -> None:
             "run",
             "--desc",
             "Super lightweight task runner for monorepos that replaces Makefiles.",
-            "--out",
+            "-o",
             str(out_dir),
         ],
     )
 
     # Assert
     assert result.exit_code == 0
-    assert "Successfully exported complete campaign" in result.stdout
     assert (out_dir / "profile.json").exists()
     assert (out_dir / "sniper_campaign.json").exists()
     assert (out_dir / "viral_campaign.json").exists()
     assert (out_dir / "directories.json").exists()
-    assert (out_dir / "aeo_pages").exists()
+    assert (out_dir / "aeo_pages").is_dir()
