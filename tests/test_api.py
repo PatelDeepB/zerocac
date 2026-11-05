@@ -85,8 +85,29 @@ def test_radar_endpoint_returns_live_signals() -> None:
     assert "Action Protocol" in data["action_plan"]
 
 
+def test_microtool_endpoint_returns_html_package() -> None:
+    """Ensure POST /api/v1/microtool produces a complete single-file web application."""
+    # Arrange
+    payload = {
+        "product_name": "ZeroCAC",
+        "description": "Autonomous AI agent that scales products to $0 CAC without paid ads.",
+        "dry_run": True,
+    }
+
+    # Act
+    response = client.post("/api/v1/microtool", json=payload)
+
+    # Assert
+    assert response.status_code == 200
+    data = response.json()
+    assert "Calculator" in data["concept"]["tool_name"]
+    assert "<!DOCTYPE html>" in data["html_content"]
+    assert "<script>" in data["html_content"]
+    assert "Quick Deployment Guide" in data["deployment_instructions"]
+
+
 def test_generate_endpoint_produces_full_campaign() -> None:
-    """Ensure POST /api/v1/generate compiles outputs across all 4 organic engines."""
+    """Ensure POST /api/v1/generate compiles outputs across all requested organic engines."""
     # Arrange
     profile_payload = {
         "product_name": "TestTool",
