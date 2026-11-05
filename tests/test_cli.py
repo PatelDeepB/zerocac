@@ -15,7 +15,7 @@ def test_cli_version_command_outputs_metadata() -> None:
 
     # Assert
     assert result.exit_code == 0
-    assert "ZeroCAC v0.1.0" in result.stdout
+    assert "ZeroCAC v0.2.0" in result.stdout
     assert "OpenAI" in result.stdout
     assert "Gemini" in result.stdout
     assert "Nemotron" in result.stdout

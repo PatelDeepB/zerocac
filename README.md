@@ -6,7 +6,7 @@
 
 <p align="center">
   <strong>The Autonomous AI Marketing Agent that scales products to $0 Customer Acquisition Cost.</strong><br>
-  Replace expensive Meta and Google ad spend with permanent, compounding organic distribution.
+  Replace expensive Meta and Google ad spend with permanent, compounding organic distribution and real-time high-velocity engines.
 </p>
 
 <p align="center">
@@ -15,6 +15,7 @@
   <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.11%20%7C%203.12-6366f1.svg?style=for-the-badge" alt="Python"></a>
   <a href="#supported-frontier-models"><img src="https://img.shields.io/badge/Frontier_Models-OpenAI_GPT--6_|_Gemini_4_|_Claude_5.5_|_Nemotron-06b6d4.svg?style=for-the-badge" alt="AI Models"></a>
   <a href="#zero-ad-spend-guarantee"><img src="https://img.shields.io/badge/Ad_Spend-$0_Guaranteed-f59e0b.svg?style=for-the-badge" alt="Zero Ad Spend"></a>
+  <a href="#test-suite"><img src="https://img.shields.io/badge/Tests-56_Passed_100%25-10b981.svg?style=for-the-badge" alt="Tests"></a>
 </p>
 
 ---
@@ -27,7 +28,7 @@ If you are paying Google or Meta to acquire users in 2026, you are on a financia
 3. **Ad Blindness & Cynicism:** Buyers scroll past sponsored banners, use ad-blockers, and distrust sponsored recommendations.
 4. **The AI Search Revolution:** Tech buyers no longer click sponsored Google links; they ask ChatGPT, Perplexity, Gemini, and Claude for product recommendations.
 
-**ZeroCAC fixes this.** Give ZeroCAC your landing page URL and your choice of AI API keys (OpenAI, Gemini, Claude, NVIDIA, DeepSeek). It analyzes your product positioning, dissects competitor weaknesses, and deploys 4 compounding organic distribution engines that drive high-intent customers for **$0 in ad spend**.
+**ZeroCAC fixes this.** Give ZeroCAC your landing page URL and your choice of AI API keys (OpenAI, Gemini, Claude, NVIDIA, DeepSeek). It analyzes your product positioning, dissects competitor weaknesses, and deploys 8 compounding organic distribution engines that drive high-intent customers for **$0 in ad spend**.
 
 ---
 
@@ -40,31 +41,49 @@ If you are paying Google or Meta to acquire users in 2026, you are on a financia
 | **User Trust Level** | Low (Sponsored Tag) | Low (Ad label) | Variable | **High (Peer Value-First)** |
 | **Answer Engine Ready** | No (Ignored by LLMs) | No (Ignored by LLMs) | Rarely | **Native (Perplexity / SearchGPT)** |
 | **Average Conversion** | 0.8% - 2.1% | 1.5% - 3.2% | 1.0% - 2.5% | **15% - 30% Intent Sniping** |
-| **Setup & Launch Time** | 3 - 5 days | 3 - 7 days | 2 - 4 weeks | **60 Seconds** |
+| **Speed to Day-1 Traction** | 15 Minutes | 15 Minutes | 2 - 4 weeks | **15 Min (Radar) / 48h (Micro-Tools)** |
 
 ---
 
-## The 4 Organic Growth Engines
+## The 8 Autonomous Organic Growth Engines
 
-### 1. 🎯 The Intent Sniper (Contextual Community Infiltration)
-* Monitors live conversations across Reddit (`r/SaaS`, `r/webdev`, `r/entrepreneur`), Hacker News (`Ask HN`), and X.
-* Pinpoints buyers actively agonizing over the exact problem your product solves.
-* Drafts practitioner-to-practitioner answers: 80% genuine, technical value solving their immediate issue, 20% natural contextual recommendation of your product.
-* Yields 15% to 30% conversion rates because buyers perceive expert guidance rather than an intrusive ad.
+### High-Velocity Velocity Engines (Day 1 to Day 7 Speed)
 
-### 2. 🔍 Answer Engine Optimization (AEO & GEO)
-* Tech-savvy buyers ask Perplexity, ChatGPT Search, and Claude: *"What is the best alternative to [Competitor]?"*
-* ZeroCAC generates programmatic, data-dense comparison pages (`alternative-to-x.md`) and valid JSON-LD FAQ schemas.
-* Structures your product footprint so generative answer engines cite your product as the canonical recommendation.
+#### 1. 📡 Live Intent Radar (`zerocac radar`)
+* Scans real-time public feeds across Reddit search JSON, Hacker News Algolia API, and GitHub Issues.
+* Identifies users actively asking *"alternative to [Competitor]"* or *"how to solve X"*.
+* Scores intent (0 to 100) and drafts authentic, zero-BS technical replies that solve the user's issue first before introducing your product.
 
-### 3. ⚡ Viral Narrative & Multi-Modal Content Engine
-* Generates 5-tweet build-in-public threads with counter-intuitive data and retention hooks.
-* Produces 5-slide LinkedIn document carousels breaking down industry bottlenecks.
-* Scripts 60-second short-form videos for TikTok, YouTube Shorts, and Instagram Reels with concrete `[Visual]` and `[Audio]` cues.
+#### 2. 🛠️ Autonomous Micro-Tool Architect (`zerocac microtool`)
+* Implements the **Engineering-as-Marketing** model (HubSpot Website Grader, Canva Palette Generator, Ahrefs Free Tools).
+* Automatically writes, styles, and exports standalone single-file HTML/CSS/JS calculators and diagnostic utilities.
+* Generates zero-login utilities that capture Day 2 viral traffic on Hacker News and Product Hunt and create permanent high-authority backlinks.
 
-### 4. 🚀 100+ Free Directory Multiplier
-* Curated database of 30+ high-authority launch directories and registries (Product Hunt, BetaList, AlternativeTo, SaaSHub, Toolify, Futurepedia, LaunchingNext).
-* Formats tailored submission packages adhering strictly to character constraints (tagline <= 60 chars, short description <= 140 chars, comprehensive overview, maker comment, tags).
+#### 3. 🧠 Princeton Generative Engine Optimization (`zerocac geo`)
+* Based on Princeton KDD benchmark research for Perplexity and ChatGPT Search indexation.
+* Produces strict 40 to 60-word Answer-First definitions, quantitative statistical evidence, and markdown comparison matrices.
+* Generates permissive `robots.txt` configuration for `PerplexityBot` and `OAI-SearchBot` plus complete JSON-LD schemas.
+
+#### 4. 🔄 Product-Led Artifact Virality Engine (`zerocac virality`)
+* Turns every output generated by the product into an organic customer acquisition channel (the Calendly / Loom / Figma model).
+* Renders scalable SVG badges (`powered by [Product] | $0 CAC`), HTML footer snippets, and Markdown README shields.
+* Defines 4-step viral loop cycle time sequences targeting a viral coefficient K > 0.6.
+
+### Compounding Foundation Engines
+
+#### 5. 🎯 The Intent Sniper (`zerocac snipe`)
+* Contextual community infiltration modeling for Reddit (`r/SaaS`, `r/webdev`), Hacker News, and X.
+* Pre-models high-intent buyer pain scenarios and practitioner-to-practitioner answers.
+
+#### 6. 🔍 Answer Engine Optimization (`zerocac aeo`)
+* Generates programmatic comparison pages (`alternative-to-x.md`) and FAQ schema.
+
+#### 7. ⚡ Viral Narrative & Multi-Modal Content Engine (`zerocac viral`)
+* Generates 5-tweet build-in-public threads with retention hooks.
+* Produces 5-slide LinkedIn document carousel scripts and 60-second video scripts with visual and audio cues.
+
+#### 8. 🚀 100+ Free Directory Multiplier (`zerocac directories`)
+* Formats tailored submission packages adhering strictly to character constraints for 30+ top directories (Product Hunt, BetaList, AlternativeTo, SaaSHub).
 
 ---
 
@@ -105,23 +124,23 @@ zerocac serve
 ### Option 2: Command Line Interface (CLI)
 
 ```bash
-# Analyze any product landing page
+# 1. Analyze any product landing page
 zerocac analyze https://yourproduct.com
 
-# Deploy the Intent Sniper for Reddit & Hacker News
-zerocac snipe https://yourproduct.com --count 3
+# 2. Intercept live user pain on Reddit & Hacker News
+zerocac radar https://yourproduct.com
 
-# Generate Answer Engine comparison pages (SearchGPT / Perplexity)
-zerocac aeo https://yourproduct.com
+# 3. Generate standalone interactive micro-tool (Engineering-as-Marketing)
+zerocac microtool https://yourproduct.com --out dist_tools
 
-# Generate X build-in-public threads & 60s video scripts
-zerocac viral https://yourproduct.com
+# 4. Generate Princeton GEO citation assets for Perplexity & SearchGPT
+zerocac geo https://yourproduct.com
 
-# Output 30+ directory submission packages
-zerocac directories https://yourproduct.com
+# 5. Generate product-led virality badges and loop mechanics
+zerocac virality https://yourproduct.com
 
-# Run the complete autonomous pipeline and export to disk
-zerocac run https://yourproduct.com --out dist_campaign
+# 6. Deploy the complete high-velocity pipeline and export all assets
+zerocac run https://yourproduct.com --velocity --out dist_campaign
 ```
 
 ### Option 3: Docker Compose
@@ -152,11 +171,15 @@ docker compose up -d
                    │
                    ▼
 ┌────────────────────────────────────────────────────────┐
-│ 3. The 4 Autonomous Organic Engines                    │
-│   ├── Engine A: Intent Sniper (Reddit / HN / X)        │
-│   ├── Engine B: AEO & GEO Comparisons (SearchGPT)      │
-│   ├── Engine C: Viral Narrative & Video Scripts        │
-│   └── Engine D: 100+ Free Directory Multiplier         │
+│ 3. The 8 Autonomous Organic Growth Engines             │
+│   ├── Engine 1: Live Intent Radar (Reddit/HN/GitHub)   │
+│   ├── Engine 2: Micro-Tool Architect (HTML/JS Apps)    │
+│   ├── Engine 3: Princeton GEO (Perplexity/SearchGPT)   │
+│   ├── Engine 4: Virality Loops (SVG Badges/K-Factor)   │
+│   ├── Engine 5: Intent Sniper (Social Infiltration)    │
+│   ├── Engine 6: AEO Pages (Markdown Comparisons)       │
+│   ├── Engine 7: Viral Narrative (Threads & Scripts)    │
+│   └── Engine 8: 100+ Free Directory Multiplier         │
 └──────────────────┬─────────────────────┘
                    │
                    ▼
@@ -178,11 +201,11 @@ zerocac/
 │   ├── ai/                          # Multi-LLM fallback router (OpenAI, Gemini, Claude, NVIDIA, DeepSeek)
 │   ├── crawler/                     # Web scraper and DOM feature extractor
 │   ├── analyzer/                    # Positioning and ICP synthesis engine
-│   ├── engines/                     # Intent Sniper, AEO, Viral Narrative, Directory Multiplier
+│   ├── engines/                     # Radar, Micro-Tool, GEO, Virality, Sniper, AEO, Narrative, Directory
 │   ├── web/                         # FastAPI application and responsive dark-theme dashboard
 │   ├── cli.py                       # Typer-powered terminal CLI
 │   └── config.py                    # Pydantic v2 settings manager
-└── tests/                           # 31 unit and integration tests (100% pass rate)
+└── tests/                           # 56 unit and integration tests (100% pass rate)
 ```
 
 ---

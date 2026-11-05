@@ -17,7 +17,7 @@ def test_health_check_endpoint_returns_healthy() -> None:
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "healthy"
-    assert data["version"] == "0.1.0"
+    assert data["version"] == "0.2.0"
     assert "default_provider" in data
 
 
