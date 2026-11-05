@@ -18,6 +18,7 @@ from zerocac.config import get_settings
 from zerocac.crawler.scraper import URLScraper
 from zerocac.engines.aeo import AEOEngine
 from zerocac.engines.directory import DirectoryEngine
+from zerocac.engines.microtool import MicroToolEngine
 from zerocac.engines.narrative import ViralNarrativeEngine
 from zerocac.engines.radar import LiveIntentRadarEngine
 from zerocac.engines.sniper import IntentSniperEngine
@@ -198,13 +199,44 @@ def radar(
 
 
 @app.command()
+def microtool(
+    url: Optional[str] = typer.Argument(None, help="Product landing page URL"),
+    description: Optional[str] = typer.Option(None, "--desc", "-d", help="Direct product description"),
+    name: Optional[str] = typer.Option(None, "--name", "-n", help="Product brand name"),
+    output_dir: Path = typer.Option(Path("dist_tools"), "--out", "-o", help="Target output folder"),
+    provider: Optional[str] = typer.Option(None, "--provider", "-p", help="Target AI provider"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Run with built-in instant templates"),
+) -> None:
+    """Generate interactive single-file micro-tools (Engineering-as-Marketing)."""
+    profile = asyncio.run(_run_analysis(url, description, provider, name))
+    console.print(f"[bold cyan]Engineering interactive micro-tool for {profile.product_name}...[/bold cyan]")
+
+    engine = MicroToolEngine()
+    package = asyncio.run(engine.generate_tool(profile, provider_name=provider, dry_run=dry_run))
+    exported_dir = engine.export_tool(package, output_dir)
+
+    console.print(
+        Panel(
+            f"[bold green]Tool Generated:[/bold green] {package.concept.tool_name}\n"
+            f"[bold cyan]Headline:[/bold cyan] {package.concept.headline}\n"
+            f"[bold yellow]Core Utility:[/bold yellow] {package.concept.core_functionality}\n"
+            f"[bold magenta]Virality Hook:[/bold magenta] {package.concept.virality_hook}\n\n"
+            f"[bold white]Saved To:[/bold white] {exported_dir.resolve()}\n\n"
+            f"[bold blue]Deployment Guide:[/bold blue]\n{package.deployment_instructions}",
+            title="Engineering-as-Marketing Asset Ready",
+            border_style="green",
+        )
+    )
+
+
+@app.command()
 def run(
     url: Optional[str] = typer.Argument(None, help="Product landing page URL"),
     description: Optional[str] = typer.Option(None, "--desc", "-d", help="Direct product description"),
     name: Optional[str] = typer.Option(None, "--name", "-n", help="Product brand name"),
     output_dir: Path = typer.Option(Path("dist_campaign"), "--out", "-o", help="Output directory"),
     provider: Optional[str] = typer.Option(None, "--provider", "-p", help="Target AI provider"),
-    velocity: bool = typer.Option(False, "--velocity", "-v", help="Include real-time Live Intent Radar scanning"),
+    velocity: bool = typer.Option(False, "--velocity", "-v", help="Include real-time Live Radar and Micro-Tools"),
 ) -> None:
     """Execute all organic growth engines and export assets to disk."""
     profile = asyncio.run(_run_analysis(url, description, provider, name))
@@ -217,13 +249,18 @@ def run(
     dir_pkg = DirectoryEngine().generate_package(profile)
 
     radar_pkg = None
+    tool_pkg = None
     if velocity:
         console.print("[bold cyan]Scanning live feeds via Live Intent Radar...[/bold cyan]")
         radar_engine = LiveIntentRadarEngine(router)
         radar_pkg = asyncio.run(radar_engine.scan_live_feeds(profile, dry_run=False))
 
+        console.print("[bold cyan]Compiling interactive micro-tool application...[/bold cyan]")
+        tool_engine = MicroToolEngine(router)
+        tool_pkg = asyncio.run(tool_engine.generate_tool(profile, provider_name=provider, dry_run=False))
+
     output_dir.mkdir(parents=True, exist_ok=True)
-    _save_campaign_artifacts(output_dir, profile, sniper_pkg, aeo_pkg, viral_pkg, dir_pkg, radar_pkg)
+    _save_campaign_artifacts(output_dir, profile, sniper_pkg, aeo_pkg, viral_pkg, dir_pkg, radar_pkg, tool_pkg)
     console.print(f"[bold green]Successfully exported complete campaign to: {output_dir.resolve()}[/bold green]")
 
 
@@ -314,6 +351,7 @@ def _save_campaign_artifacts(
     viral: any,
     directory: any,
     radar: any = None,
+    tool: any = None,
 ) -> None:
     """Write generated assets to organized files."""
     (out_dir / "profile.json").write_text(profile.model_dump_json(indent=2), encoding="utf-8")
@@ -323,6 +361,11 @@ def _save_campaign_artifacts(
 
     if radar:
         (out_dir / "radar_signals.json").write_text(radar.model_dump_json(indent=2), encoding="utf-8")
+
+    if tool:
+        tools_dir = out_dir / "micro_tools"
+        tools_dir.mkdir(parents=True, exist_ok=True)
+        MicroToolEngine().export_tool(tool, tools_dir)
 
     # Export AEO markdown pages
     aeo_dir = out_dir / "aeo_pages"

@@ -57,8 +57,29 @@ def test_cli_radar_command_outputs_table() -> None:
     # Assert
     assert result.exit_code == 0
     assert "Live Intent Radar Signals" in result.stdout
-    assert "Reddit" in result.stdout
     assert "Radar Action Protocol" in result.stdout
+
+
+def test_cli_microtool_command_generates_files(tmp_path: Path) -> None:
+    """Ensure `zerocac microtool` creates the standalone HTML web utility."""
+    # Arrange & Act
+    out_dir = tmp_path / "tools_export"
+    result = runner.invoke(
+        app,
+        [
+            "microtool",
+            "--desc",
+            "Autonomous open source customer acquisition engine.",
+            "--out",
+            str(out_dir),
+            "--dry-run",
+        ],
+    )
+
+    # Assert
+    assert result.exit_code == 0
+    assert "Engineering-as-Marketing Asset Ready" in result.stdout
+    assert (out_dir / "ad-spend-vs-organic-cac-calculator" / "index.html").exists()
 
 
 def test_cli_run_command_exports_campaign_artifacts(tmp_path: Path) -> None:

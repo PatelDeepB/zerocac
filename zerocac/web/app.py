@@ -16,6 +16,7 @@ from zerocac.config import get_settings
 from zerocac.crawler.scraper import URLScraper
 from zerocac.engines.aeo import AEOEngine, AEOSchemaPackage
 from zerocac.engines.directory import DirectoryEngine, DirectorySubmissionPackage
+from zerocac.engines.microtool import MicroToolEngine, MicroToolPackage
 from zerocac.engines.narrative import ViralCampaignPackage, ViralNarrativeEngine
 from zerocac.engines.radar import LiveIntentRadarEngine, RadarReport
 from zerocac.engines.sniper import IntentSniperEngine, SniperCampaign
@@ -63,6 +64,18 @@ class RadarApiRequest(BaseModel):
     provider: Optional[str] = None
 
 
+class MicroToolApiRequest(BaseModel):
+    """Payload for generating standalone interactive micro-tools."""
+
+    profile: Optional[ProductProfile] = None
+    url: Optional[str] = None
+    description: Optional[str] = None
+    product_name: Optional[str] = "Product"
+    dry_run: bool = False
+    provider: Optional[str] = None
+    model: Optional[str] = None
+
+
 class GenerateRequest(BaseModel):
     """Payload for generating organic campaign assets from a ProductProfile."""
 
@@ -84,6 +97,7 @@ class FullCampaignResponse(BaseModel):
     narrative: Optional[ViralCampaignPackage] = None
     directory: Optional[DirectorySubmissionPackage] = None
     radar: Optional[RadarReport] = None
+    microtool: Optional[MicroToolPackage] = None
 
 
 @app.get("/health", tags=["System"])
@@ -130,7 +144,6 @@ async def analyze_product(payload: AnalyzeRequest) -> ProductProfile:
                 raw_data, provider_name=payload.provider, model=payload.model
             )
         except Exception:
-            # Fallback to analyzing domain name as description if crawl fails
             return await analyzer.analyze_text(
                 description=f"Product at {payload.url}",
                 product_name=payload.product_name or "Product",
@@ -172,6 +185,32 @@ async def run_radar(payload: RadarApiRequest) -> RadarReport:
     )
 
 
+@app.post("/api/v1/microtool", response_model=MicroToolPackage, tags=["Micro-Tool"])
+async def generate_microtool(payload: MicroToolApiRequest) -> MicroToolPackage:
+    """Generate standalone interactive HTML/JS micro-tool for Engineering-as-Marketing."""
+    profile = payload.profile
+    if not profile:
+        if not payload.url and not payload.description:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Either 'profile', 'url', or 'description' must be provided.",
+            )
+        analyzer = ProductAnalyzer()
+        profile = await analyzer.analyze_text(
+            description=payload.description or f"Product at {payload.url}",
+            product_name=payload.product_name or "Product",
+            provider_name=payload.provider,
+        )
+
+    engine = MicroToolEngine(router=AIRouter())
+    return await engine.generate_tool(
+        profile=profile,
+        provider_name=payload.provider,
+        model=payload.model,
+        dry_run=payload.dry_run,
+    )
+
+
 @app.post("/api/v1/generate", response_model=FullCampaignResponse, tags=["Campaigns"])
 async def generate_campaign(payload: GenerateRequest) -> FullCampaignResponse:
     """Execute requested organic growth engines and compile campaign package."""
@@ -204,5 +243,9 @@ async def generate_campaign(payload: GenerateRequest) -> FullCampaignResponse:
     if "radar" in payload.engines:
         radar_engine = LiveIntentRadarEngine(router=router)
         response.radar = await radar_engine.scan_live_feeds(profile, dry_run=False)
+
+    if "microtool" in payload.engines:
+        tool_engine = MicroToolEngine(router=router)
+        response.microtool = await tool_engine.generate_tool(profile, dry_run=False)
 
     return response
