@@ -32,6 +32,7 @@ from zerocac.leads.nurture import NurtureEngine
 from zerocac.leads.repository import LeadRepository
 from zerocac.dispatchers.models import ApprovalStatus, DispatchChannel, DispatchItem
 from zerocac.dispatchers.queue import DispatchQueue
+from zerocac.telemetry.engine import TelemetryEngine
 
 app = typer.Typer(
     name="zerocac",
@@ -516,6 +517,47 @@ def reject_dispatch_item(
     else:
         console.print(f"[bold red]Item {item_id} not found.[/bold red]")
         raise typer.Exit(code=1)
+
+
+@app.command(name="telemetry")
+def view_telemetry() -> None:
+    """View closed-loop telemetry analytics, $0 CAC ad savings, and self-tuning health."""
+    engine = TelemetryEngine()
+    report = asyncio.run(engine.audit_assets())
+
+    console.print(
+        Panel(
+            f"[bold green]Total Leads Acquired ($0 CAC):[/bold green] {report.total_leads_acquired}\n"
+            f"[bold yellow]Estimated Ad Budget Saved:[/bold yellow] ${report.estimated_ad_savings_usd:,.2f} USD\n"
+            f"[bold cyan]Blended Conversion Rate:[/bold cyan] {report.blended_conversion_rate}%\n"
+            f"[bold white]Monitored Organic Assets:[/bold white] {report.total_assets}\n"
+            f"[bold dim]Total Clicks / Impressions:[/bold dim] {report.total_clicks} / {report.total_impressions}",
+            title="Closed-Loop Telemetry & Organic ROI Report",
+            border_style="green",
+        )
+    )
+
+    if report.assets:
+        table = Table(title="Organic Asset Health & Self-Healing Actions", border_style="cyan")
+        table.add_column("Asset Slug", style="bold white")
+        table.add_column("Clicks / Imp", style="dim")
+        table.add_column("CTR", style="cyan")
+        table.add_column("Leads", style="bold green")
+        table.add_column("Conv %", style="yellow")
+        table.add_column("Health Status", style="magenta")
+        table.add_column("Prescribed Action", style="blue")
+
+        for a in report.assets:
+            table.add_row(
+                a.slug[:28],
+                f"{a.clicks}/{a.impressions}",
+                f"{a.ctr:.1f}%",
+                str(a.leads_captured),
+                f"{a.conversion_rate:.1f}%",
+                a.tier.value.upper(),
+                a.recommended_action.value.replace("_", " ").title(),
+            )
+        console.print(table)
 
 
 @app.command()
