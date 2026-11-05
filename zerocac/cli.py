@@ -30,6 +30,8 @@ from zerocac.leads.dispatcher import ResendDispatcher
 from zerocac.leads.models import LeadStatus
 from zerocac.leads.nurture import NurtureEngine
 from zerocac.leads.repository import LeadRepository
+from zerocac.dispatchers.models import ApprovalStatus, DispatchChannel, DispatchItem
+from zerocac.dispatchers.queue import DispatchQueue
 
 app = typer.Typer(
     name="zerocac",
@@ -447,6 +449,73 @@ def execute_nurture(
         console.print(f"[bold green]Successfully dispatched Stage 1 to {lead.email}![/bold green] (ID: {res.get('id')})")
     else:
         console.print(f"[bold red]Dispatch failed:[/bold red] {res.get('error')}")
+
+
+dispatch_app = typer.Typer(name="dispatch", help="Multi-channel approval queue and syndication commands")
+app.add_typer(dispatch_app, name="dispatch")
+
+
+@dispatch_app.command(name="queue")
+def list_dispatch_queue(
+    status: Optional[str] = typer.Option(None, "--status", "-s", help="Filter by status (pending, approved, dispatched)"),
+    limit: int = typer.Option(50, "--limit", "-l", help="Max items to list"),
+) -> None:
+    """List assets awaiting approval or recently dispatched."""
+    queue = DispatchQueue()
+    status_filter = ApprovalStatus(status.lower()) if status else None
+    items = asyncio.run(queue.list_queue(status=status_filter, limit=limit))
+
+    if not items:
+        console.print("[yellow]Dispatch queue is currently empty.[/yellow]")
+        return
+
+    table = Table(title="Outbound Distribution Approval Queue", border_style="magenta")
+    table.add_column("Item ID", style="dim")
+    table.add_column("Channel", style="bold cyan")
+    table.add_column("Headline", style="white")
+    table.add_column("Status", style="bold yellow")
+    table.add_column("Created At", style="dim")
+
+    for it in items:
+        table.add_row(
+            it.item_id,
+            it.channel.value.upper(),
+            it.title[:40],
+            it.status.value.upper(),
+            it.created_at[:16].replace("T", " "),
+        )
+    console.print(table)
+
+
+@dispatch_app.command(name="approve")
+def approve_dispatch_item(
+    item_id: str = typer.Argument(..., help="Item identifier to approve and publish"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Simulate publishing"),
+) -> None:
+    """Approve queued item and fire destination channel webhook."""
+    queue = DispatchQueue()
+    console.print(f"[bold cyan]Approving and dispatching {item_id}...[/bold cyan]")
+    res = asyncio.run(queue.approve_and_dispatch(item_id, dry_run=dry_run))
+
+    if res.success:
+        console.print(f"[bold green]Successfully published to {res.channel.value}![/bold green] (Post ID: {res.external_post_id})")
+    else:
+        console.print(f"[bold red]Dispatch failed:[/bold red] {res.error_message}")
+        raise typer.Exit(code=1)
+
+
+@dispatch_app.command(name="reject")
+def reject_dispatch_item(
+    item_id: str = typer.Argument(..., help="Item identifier to reject"),
+) -> None:
+    """Reject queued distribution draft."""
+    queue = DispatchQueue()
+    ok = asyncio.run(queue.reject(item_id))
+    if ok:
+        console.print(f"[bold yellow]Rejected item {item_id}.[/bold yellow]")
+    else:
+        console.print(f"[bold red]Item {item_id} not found.[/bold red]")
+        raise typer.Exit(code=1)
 
 
 @app.command()
