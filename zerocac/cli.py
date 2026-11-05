@@ -19,6 +19,7 @@ from zerocac.crawler.scraper import URLScraper
 from zerocac.engines.aeo import AEOEngine
 from zerocac.engines.directory import DirectoryEngine
 from zerocac.engines.narrative import ViralNarrativeEngine
+from zerocac.engines.radar import LiveIntentRadarEngine
 from zerocac.engines.sniper import IntentSniperEngine
 
 app = typer.Typer(
@@ -68,25 +69,29 @@ def snipe(
     provider: Optional[str] = typer.Option(None, "--provider", "-p", help="Target AI provider"),
     count: int = typer.Option(3, "--count", "-c", help="Number of opportunities to generate"),
 ) -> None:
-    """Generate high-intent social problem-solving opportunities across Reddit, HN, and X."""
+    """Identify buyer pain queries on Reddit, Hacker News, and X and draft authentic responses."""
     profile = asyncio.run(_run_analysis(url, description, provider, name))
     sniper_engine = IntentSniperEngine()
     campaign = asyncio.run(
         sniper_engine.generate_opportunities(profile, count=count, provider_name=provider)
     )
 
-    console.print(f"\n[bold green]Intent Sniper Opportunities for {profile.product_name}:[/bold green]\n")
+    table = Table(title=f"Intent Sniper Opportunities for {profile.product_name}")
+    table.add_column("Platform", style="cyan", width=12)
+    table.add_column("Community", style="green", width=15)
+    table.add_column("Intent", justify="right", style="magenta", width=8)
+    table.add_column("Question / Pain Statement", style="white", width=35)
+    table.add_column("Drafted Authentic Response", style="dim", width=40)
+
     for opp in campaign.opportunities:
-        console.print(
-            Panel(
-                f"[bold cyan]Thread:[/bold cyan] {opp.thread_title}\n"
-                f"[bold yellow]Platform:[/bold yellow] {opp.platform} ({opp.community}) | "
-                f"[bold green]Intent Score:[/bold green] {opp.intent_score}%\n\n"
-                f"[bold white]Drafted Solution:[/bold white]\n{opp.draft_response}",
-                title=f"{opp.platform} Opportunity",
-                border_style="cyan",
-            )
+        table.add_row(
+            opp.platform,
+            opp.community,
+            f"{opp.intent_score}/100",
+            opp.thread_title,
+            opp.draft_response,
         )
+    console.print(table)
 
 
 @app.command()
@@ -96,14 +101,21 @@ def aeo(
     name: Optional[str] = typer.Option(None, "--name", "-n", help="Product brand name"),
     provider: Optional[str] = typer.Option(None, "--provider", "-p", help="Target AI provider"),
 ) -> None:
-    """Generate comparison pages and JSON-LD schema for Perplexity and SearchGPT."""
+    """Generate Answer Engine Optimization comparison pages and FAQ schema for AI crawlers."""
     profile = asyncio.run(_run_analysis(url, description, provider, name))
     aeo_engine = AEOEngine()
     package = asyncio.run(aeo_engine.generate_package(profile, provider_name=provider))
 
-    console.print(f"\n[bold green]Generated {len(package.comparison_pages)} AEO Comparison Pages:[/bold green]\n")
     for page in package.comparison_pages:
-        console.print(Panel(page.markdown_content[:600] + "\n...", title=page.title, border_style="magenta"))
+        console.print(
+            Panel(
+                f"[bold cyan]Slug:[/bold cyan] {page.slug}\n"
+                f"[bold green]Title:[/bold green] {page.page_title}\n\n"
+                f"{page.markdown_content[:600]}...",
+                title=f"AEO Target: vs {page.target_competitor}",
+                border_style="blue",
+            )
+        )
 
 
 @app.command()
@@ -149,16 +161,54 @@ def directories(
 
 
 @app.command()
+def radar(
+    url: Optional[str] = typer.Argument(None, help="Product landing page URL"),
+    description: Optional[str] = typer.Option(None, "--desc", "-d", help="Direct product description"),
+    name: Optional[str] = typer.Option(None, "--name", "-n", help="Product brand name"),
+    keywords: Optional[str] = typer.Option(None, "--keywords", "-k", help="Comma-separated custom search terms"),
+    provider: Optional[str] = typer.Option(None, "--provider", "-p", help="Target AI provider"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Run with deterministic simulated feeds"),
+) -> None:
+    """Scan real-time Reddit, Hacker News, and GitHub streams for high-intent pain points."""
+    profile = asyncio.run(_run_analysis(url, description, provider, name))
+    kw_list = [k.strip() for k in keywords.split(",")] if keywords else None
+
+    console.print(f"[bold cyan]Scanning live intent radar for {profile.product_name}...[/bold cyan]")
+    engine = LiveIntentRadarEngine()
+    report = asyncio.run(engine.scan_live_feeds(profile, keywords=kw_list, dry_run=dry_run))
+
+    table = Table(title=f"Live Intent Radar Signals ({report.signals_found} Found)")
+    table.add_column("Source", style="bold yellow")
+    table.add_column("Score", style="bold green", justify="center")
+    table.add_column("Discussion / Post", style="white")
+    table.add_column("Pain Category", style="magenta")
+    table.add_column("Recommended Authentic Reply", style="dim")
+
+    for sig in report.high_intent_signals:
+        table.add_row(
+            sig.source.value,
+            str(sig.intent_score),
+            f"{sig.title}\n[link={sig.url}]{sig.url}[/link]",
+            sig.pain_category,
+            sig.recommended_reply,
+        )
+
+    console.print(table)
+    console.print(Panel(report.action_plan, title="Radar Action Protocol", border_style="green"))
+
+
+@app.command()
 def run(
     url: Optional[str] = typer.Argument(None, help="Product landing page URL"),
     description: Optional[str] = typer.Option(None, "--desc", "-d", help="Direct product description"),
     name: Optional[str] = typer.Option(None, "--name", "-n", help="Product brand name"),
     output_dir: Path = typer.Option(Path("dist_campaign"), "--out", "-o", help="Output directory"),
     provider: Optional[str] = typer.Option(None, "--provider", "-p", help="Target AI provider"),
+    velocity: bool = typer.Option(False, "--velocity", "-v", help="Include real-time Live Intent Radar scanning"),
 ) -> None:
     """Execute all organic growth engines and export assets to disk."""
     profile = asyncio.run(_run_analysis(url, description, provider, name))
-    console.print(f"[bold yellow]Executing all 4 organic distribution engines for {profile.product_name}...[/bold yellow]")
+    console.print(f"[bold yellow]Executing organic distribution engines for {profile.product_name}...[/bold yellow]")
 
     router = AIRouter()
     sniper_pkg = asyncio.run(IntentSniperEngine(router).generate_opportunities(profile, count=3, provider_name=provider))
@@ -166,8 +216,14 @@ def run(
     viral_pkg = asyncio.run(ViralNarrativeEngine(router).generate_campaign(profile, provider_name=provider))
     dir_pkg = DirectoryEngine().generate_package(profile)
 
+    radar_pkg = None
+    if velocity:
+        console.print("[bold cyan]Scanning live feeds via Live Intent Radar...[/bold cyan]")
+        radar_engine = LiveIntentRadarEngine(router)
+        radar_pkg = asyncio.run(radar_engine.scan_live_feeds(profile, dry_run=False))
+
     output_dir.mkdir(parents=True, exist_ok=True)
-    _save_campaign_artifacts(output_dir, profile, sniper_pkg, aeo_pkg, viral_pkg, dir_pkg)
+    _save_campaign_artifacts(output_dir, profile, sniper_pkg, aeo_pkg, viral_pkg, dir_pkg, radar_pkg)
     console.print(f"[bold green]Successfully exported complete campaign to: {output_dir.resolve()}[/bold green]")
 
 
@@ -257,12 +313,16 @@ def _save_campaign_artifacts(
     aeo: any,
     viral: any,
     directory: any,
+    radar: any = None,
 ) -> None:
     """Write generated assets to organized files."""
     (out_dir / "profile.json").write_text(profile.model_dump_json(indent=2), encoding="utf-8")
     (out_dir / "sniper_campaign.json").write_text(sniper.model_dump_json(indent=2), encoding="utf-8")
     (out_dir / "viral_campaign.json").write_text(viral.model_dump_json(indent=2), encoding="utf-8")
     (out_dir / "directories.json").write_text(directory.model_dump_json(indent=2), encoding="utf-8")
+
+    if radar:
+        (out_dir / "radar_signals.json").write_text(radar.model_dump_json(indent=2), encoding="utf-8")
 
     # Export AEO markdown pages
     aeo_dir = out_dir / "aeo_pages"

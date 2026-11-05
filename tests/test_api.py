@@ -64,6 +64,27 @@ def test_analyze_endpoint_succeeds_with_description() -> None:
     assert len(data["competitor_gaps"]) >= 1
 
 
+def test_radar_endpoint_returns_live_signals() -> None:
+    """Ensure POST /api/v1/radar returns scored opportunities in dry-run mode."""
+    # Arrange
+    payload = {
+        "product_name": "ZeroCAC",
+        "description": "Autonomous AI agent that scales products to $0 CAC without paid ads.",
+        "dry_run": True,
+    }
+
+    # Act
+    response = client.post("/api/v1/radar", json=payload)
+
+    # Assert
+    assert response.status_code == 200
+    data = response.json()
+    assert data["product_name"] == "ZeroCAC"
+    assert data["signals_found"] >= 3
+    assert len(data["high_intent_signals"]) >= 3
+    assert "Action Protocol" in data["action_plan"]
+
+
 def test_generate_endpoint_produces_full_campaign() -> None:
     """Ensure POST /api/v1/generate compiles outputs across all 4 organic engines."""
     # Arrange
