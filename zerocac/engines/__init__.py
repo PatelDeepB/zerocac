@@ -32,6 +32,10 @@ from zerocac.engines.sniper import (
     SniperCampaign,
     SniperOpportunity,
 )
+from zerocac.engines.virality_loop import (
+    ViralityArtifactPackage,
+    ViralityEngine,
+)
 
 __all__ = [
     "AEOComparisonPage",
@@ -56,4 +60,6 @@ __all__ = [
     "SocialPost",
     "ViralCampaignPackage",
     "ViralNarrativeEngine",
+    "ViralityArtifactPackage",
+    "ViralityEngine",
 ]

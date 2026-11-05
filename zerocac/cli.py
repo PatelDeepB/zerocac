@@ -23,6 +23,7 @@ from zerocac.engines.microtool import MicroToolEngine
 from zerocac.engines.narrative import ViralNarrativeEngine
 from zerocac.engines.radar import LiveIntentRadarEngine
 from zerocac.engines.sniper import IntentSniperEngine
+from zerocac.engines.virality_loop import ViralityEngine
 
 app = typer.Typer(
     name="zerocac",
@@ -263,13 +264,40 @@ def geo(
 
 
 @app.command()
+def virality(
+    url: Optional[str] = typer.Argument(None, help="Product landing page URL"),
+    description: Optional[str] = typer.Option(None, "--desc", "-d", help="Direct product description"),
+    name: Optional[str] = typer.Option(None, "--name", "-n", help="Product brand name"),
+    provider: Optional[str] = typer.Option(None, "--provider", "-p", help="Target AI provider"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Run with deterministic loop specifications"),
+) -> None:
+    """Generate product-led viral loops, embeddable badges, and social artifacts."""
+    profile = asyncio.run(_run_analysis(url, description, provider, name))
+    console.print(f"[bold cyan]Engineering product-led virality for {profile.product_name}...[/bold cyan]")
+
+    engine = ViralityEngine()
+    package = asyncio.run(engine.generate_package(profile, provider_name=provider, dry_run=dry_run))
+
+    console.print(
+        Panel(
+            f"[bold cyan]K-Factor Strategy:[/bold cyan]\n{package.k_factor_strategy}\n\n"
+            f"[bold green]Viral Loop Mechanics:[/bold green]\n" + "\n".join(package.viral_loop_mechanics) + "\n\n"
+            f"[bold yellow]Markdown Badge (for GitHub README):[/bold yellow]\n{package.markdown_badge}\n\n"
+            f"[bold magenta]HTML Footer Snippet:[/bold magenta]\n{package.html_badge_snippet}",
+            title="Product-Led Virality & Distribution Assets",
+            border_style="green",
+        )
+    )
+
+
+@app.command()
 def run(
     url: Optional[str] = typer.Argument(None, help="Product landing page URL"),
     description: Optional[str] = typer.Option(None, "--desc", "-d", help="Direct product description"),
     name: Optional[str] = typer.Option(None, "--name", "-n", help="Product brand name"),
     output_dir: Path = typer.Option(Path("dist_campaign"), "--out", "-o", help="Output directory"),
     provider: Optional[str] = typer.Option(None, "--provider", "-p", help="Target AI provider"),
-    velocity: bool = typer.Option(False, "--velocity", "-v", help="Include real-time Live Radar, Micro-Tools, and Princeton GEO"),
+    velocity: bool = typer.Option(False, "--velocity", "-v", help="Include real-time Live Radar, Micro-Tools, GEO, and Virality"),
 ) -> None:
     """Execute all organic growth engines and export assets to disk."""
     profile = asyncio.run(_run_analysis(url, description, provider, name))
@@ -284,6 +312,7 @@ def run(
     radar_pkg = None
     tool_pkg = None
     geo_pkg = None
+    virality_pkg = None
     if velocity:
         console.print("[bold cyan]Scanning live feeds via Live Intent Radar...[/bold cyan]")
         radar_engine = LiveIntentRadarEngine(router)
@@ -297,8 +326,12 @@ def run(
         geo_engine = PrincetonGEOEngine(router)
         geo_pkg = asyncio.run(geo_engine.generate_package(profile, provider_name=provider, dry_run=False))
 
+        console.print("[bold cyan]Synthesizing product-led virality loop...[/bold cyan]")
+        virality_engine = ViralityEngine(router)
+        virality_pkg = asyncio.run(virality_engine.generate_package(profile, provider_name=provider, dry_run=False))
+
     output_dir.mkdir(parents=True, exist_ok=True)
-    _save_campaign_artifacts(output_dir, profile, sniper_pkg, aeo_pkg, viral_pkg, dir_pkg, radar_pkg, tool_pkg, geo_pkg)
+    _save_campaign_artifacts(output_dir, profile, sniper_pkg, aeo_pkg, viral_pkg, dir_pkg, radar_pkg, tool_pkg, geo_pkg, virality_pkg)
     console.print(f"[bold green]Successfully exported complete campaign to: {output_dir.resolve()}[/bold green]")
 
 
@@ -391,6 +424,7 @@ def _save_campaign_artifacts(
     radar: any = None,
     tool: any = None,
     geo: any = None,
+    virality: any = None,
 ) -> None:
     """Write generated assets to organized files."""
     (out_dir / "profile.json").write_text(profile.model_dump_json(indent=2), encoding="utf-8")
@@ -411,6 +445,12 @@ def _save_campaign_artifacts(
         geo_dir.mkdir(parents=True, exist_ok=True)
         (geo_dir / "robots.txt").write_text(geo.robots_txt_rules, encoding="utf-8")
         (geo_dir / "geo_package.json").write_text(geo.model_dump_json(indent=2), encoding="utf-8")
+
+    if virality:
+        v_dir = out_dir / "virality"
+        v_dir.mkdir(parents=True, exist_ok=True)
+        (v_dir / "badge.svg").write_text(virality.svg_badge, encoding="utf-8")
+        (v_dir / "virality_package.json").write_text(virality.model_dump_json(indent=2), encoding="utf-8")
 
     # Export AEO markdown pages
     aeo_dir = out_dir / "aeo_pages"

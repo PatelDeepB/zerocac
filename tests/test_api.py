@@ -127,6 +127,27 @@ def test_geo_endpoint_returns_citation_package() -> None:
     assert "ZeroCAC" in data["assets"][0]["answer_first_definition"]
 
 
+def test_virality_endpoint_returns_loop_assets() -> None:
+    """Ensure POST /api/v1/virality produces SVG badges and loop mechanics."""
+    # Arrange
+    payload = {
+        "product_name": "ZeroCAC",
+        "description": "Autonomous AI agent that scales products to $0 CAC without paid ads.",
+        "dry_run": True,
+    }
+
+    # Act
+    response = client.post("/api/v1/virality", json=payload)
+
+    # Assert
+    assert response.status_code == 200
+    data = response.json()
+    assert data["product_name"] == "ZeroCAC"
+    assert "<svg" in data["svg_badge"]
+    assert len(data["viral_loop_mechanics"]) == 4
+    assert "[![Powered by ZeroCAC]" in data["markdown_badge"]
+
+
 def test_generate_endpoint_produces_full_campaign() -> None:
     """Ensure POST /api/v1/generate compiles outputs across all requested organic engines."""
     # Arrange

@@ -98,6 +98,21 @@ def test_cli_geo_command_outputs_panels() -> None:
     assert "Bing / ChatGPT Search Action Plan" in result.stdout
 
 
+def test_cli_virality_command_outputs_panel() -> None:
+    """Ensure `zerocac virality` produces product-led K-factor loop assets."""
+    # Arrange & Act
+    result = runner.invoke(
+        app,
+        ["virality", "--desc", "Autonomous open source customer acquisition engine.", "--dry-run"],
+    )
+
+    # Assert
+    assert result.exit_code == 0
+    assert "Product-Led Virality & Distribution Assets" in result.stdout
+    assert "K-Factor Strategy" in result.stdout
+    assert "Markdown Badge" in result.stdout
+
+
 def test_cli_run_command_exports_campaign_artifacts(tmp_path: Path) -> None:
     """Ensure `zerocac run` compiles all 4 engines and writes files to the target directory."""
     # Arrange
