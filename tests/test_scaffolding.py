@@ -12,7 +12,7 @@ def test_package_metadata_should_be_defined() -> None:
     version = __version__
 
     # Assert
-    assert version == "0.1.0"
+    assert version == "0.2.0"
     assert isinstance(version, str)
 
 
