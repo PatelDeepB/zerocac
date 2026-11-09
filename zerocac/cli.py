@@ -32,6 +32,8 @@ from zerocac.leads.nurture import NurtureEngine
 from zerocac.leads.repository import LeadRepository
 from zerocac.dispatchers.models import ApprovalStatus, DispatchChannel, DispatchItem
 from zerocac.dispatchers.queue import DispatchQueue
+from zerocac.launch.models import HardenedLaunchPackage
+from zerocac.launch.orchestrator import LaunchOrchestrator
 from zerocac.telemetry.engine import TelemetryEngine
 
 app = typer.Typer(
@@ -558,6 +560,102 @@ def view_telemetry() -> None:
                 a.recommended_action.value.replace("_", " ").title(),
             )
         console.print(table)
+
+
+launch_app = typer.Typer(name="launch", help="Autonomous 8-Vector Day-1 Launch Carpet Bombing commands")
+app.add_typer(launch_app, name="launch")
+
+
+@launch_app.command(name="prepare")
+def prepare_launch_cmd(
+    url: Optional[str] = typer.Argument(None, help="Product landing page URL"),
+    description: Optional[str] = typer.Option(None, "--desc", "-d", help="Direct product description"),
+    name: Optional[str] = typer.Option(None, "--name", "-n", help="Product brand name"),
+    output_dir: Path = typer.Option(Path("dist_launch"), "--out", "-o", help="Output directory"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Simulate synthesis"),
+) -> None:
+    """Synthesize complete 8-vector Day-1 launch package."""
+    profile = asyncio.run(_run_analysis(url, description, provider=None, name=name))
+    console.print(f"[bold cyan]Compiling 8-Vector Day-1 Launch Machine for {profile.product_name}...[/bold cyan]")
+
+    engine = MicroToolEngine()
+    tool_pkg = asyncio.run(engine.generate_tool(profile, dry_run=True))
+    live_url = f"https://{tool_pkg.concept.slug}.pages.dev"
+
+    orchestrator = LaunchOrchestrator()
+    package = orchestrator.prepare_launch_kit(
+        profile=profile,
+        tool_html=tool_pkg.html_content,
+        tool_slug=tool_pkg.concept.slug,
+        live_url=live_url,
+        tool_name=tool_pkg.concept.tool_name,
+    )
+
+    output_dir.mkdir(parents=True, exist_ok=True)
+    pkg_path = output_dir / "launch_package.json"
+    pkg_path.write_text(package.model_dump_json(indent=2), encoding="utf-8")
+
+    orchestrator.github_packager.export_repository(package.github_package, tool_pkg.html_content, output_dir)
+
+    table = Table(title=f"8-Vector Day-1 Launch Package: {profile.product_name}", border_style="green")
+    table.add_column("Vector", style="bold cyan")
+    table.add_column("Target Destination", style="white")
+    table.add_column("Artifact Headline", style="green")
+
+    table.add_row("Vector 1: GitHub Open Source", package.github_package.repo_name, package.github_package.tagline)
+    table.add_row("Vector 2: Hacker News", "Hacker News (Show HN)", package.show_hn.title)
+    table.add_row("Vector 3: Launch Trio", "Product Hunt + Peerlist + MicroLaunch", f"{len(package.launch_trio)} Aggregator Payloads")
+    table.add_row("Vector 4: Subreddit Value", "5x Target Subreddits", ", ".join(p.subreddit for p in package.reddit_posts))
+    table.add_row("Vector 5: Tech Publishing", "Dev.to + Hashnode", package.technical_articles[0].title[:35])
+    table.add_row("Vector 6: X Thread", "X / Twitter Algorithmic Thread", f"{len(package.social_blast.x_thread)} Tweets + Video Script")
+    table.add_row("Vector 7: LinkedIn Story", "LinkedIn Founder Post", "Narrative Post + 1st Comment Link")
+    table.add_row("Vector 8: Startup Directories", "15x High-DA Directories", f"{len(package.directories)} Directory Payloads")
+
+    console.print(table)
+    console.print(f"[bold green]Launch kit successfully exported to: {pkg_path.resolve()}[/bold green]")
+
+
+@launch_app.command(name="execute")
+def execute_launch_cmd(
+    package_file: Path = typer.Argument(..., help="Path to launch_package.json"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Simulate dispatch without live API calls"),
+) -> None:
+    """Dispatch multi-wave launch across all 8 vectors."""
+    if not package_file.exists():
+        console.print(f"[bold red]Error: Package file '{package_file}' not found.[/bold red]")
+        raise typer.Exit(code=1)
+
+    data = json.loads(package_file.read_text(encoding="utf-8"))
+    package = HardenedLaunchPackage(**data)
+
+    console.print(f"[bold yellow]Executing 8-Vector Day-1 Carpet Bombing for {package.product_name}...[/bold yellow]")
+    orchestrator = LaunchOrchestrator()
+    report = asyncio.run(orchestrator.execute_launch(package, dry_run=dry_run))
+
+    table = Table(title="Day-1 Multi-Wave Execution Report", border_style="magenta")
+    table.add_column("Vector", style="bold cyan")
+    table.add_column("Destination", style="white")
+    table.add_column("Status", style="bold green")
+    table.add_column("Live URL", style="dim")
+
+    for v in report.vector_results:
+        table.add_row(
+            v.vector.value.upper(),
+            v.destination,
+            "[bold green]DISPATCHED[/bold green]" if v.success else "[bold red]FAILED[/bold red]",
+            v.live_post_url or "-",
+        )
+    console.print(table)
+    console.print(
+        Panel(
+            f"[bold green]Total Vectors Dispatched:[/bold green] {report.successful_vectors} / {report.total_vectors_attempted}\n"
+            f"[bold yellow]Guaranteed Day-1 Visitor Floor:[/bold yellow] ~{report.estimated_day1_visitors_floor} Visitors\n"
+            f"[bold cyan]Estimated Day-1 Lead Yield (12%):[/bold cyan] ~{int(report.estimated_day1_visitors_floor * 0.12)} Qualified Leads\n"
+            f"[bold green]Equivalent Ad Budget Saved:[/bold green] ${int(report.estimated_day1_visitors_floor * 0.12) * 25:,.2f} USD ($0 CAC)",
+            title="Day-1 Launch Impact Projection",
+            border_style="green",
+        )
+    )
 
 
 @app.command()

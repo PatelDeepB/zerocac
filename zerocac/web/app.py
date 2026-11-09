@@ -24,6 +24,7 @@ from zerocac.engines.sniper import IntentSniperEngine, SniperCampaign
 from zerocac.engines.virality_loop import ViralityArtifactPackage, ViralityEngine
 from zerocac.web.routers.deploy import router as deploy_router
 from zerocac.web.routers.dispatch import router as dispatch_router
+from zerocac.web.routers.launch import router as launch_router
 from zerocac.web.routers.leads import router as leads_router
 from zerocac.web.routers.telemetry import router as telemetry_router
 
@@ -35,6 +36,7 @@ app = FastAPI(
 
 app.include_router(deploy_router)
 app.include_router(dispatch_router)
+app.include_router(launch_router)
 app.include_router(leads_router)
 app.include_router(telemetry_router)
 
