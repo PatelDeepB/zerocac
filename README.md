@@ -5,8 +5,8 @@
 </p>
 
 <p align="center">
-  <strong>The Autonomous AI Marketing Agent that scales products to $0 Customer Acquisition Cost.</strong><br>
-  Replace expensive Meta and Google ad spend with permanent, compounding organic distribution and real-time high-velocity engines.
+  <strong>The Autonomous Closed-Loop AI Growth Operating System that scales products to $0 Customer Acquisition Cost.</strong><br>
+  Replace expensive Meta and Google ad spend with permanent compounding organic equity, 8-vector Day-1 launch bursts, and autonomous conversion loops.
 </p>
 
 <p align="center">
@@ -15,7 +15,7 @@
   <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.11%20%7C%203.12-6366f1.svg?style=for-the-badge" alt="Python"></a>
   <a href="#supported-frontier-models"><img src="https://img.shields.io/badge/Frontier_Models-OpenAI_GPT--6_|_Gemini_4_|_Claude_5.5_|_Nemotron-06b6d4.svg?style=for-the-badge" alt="AI Models"></a>
   <a href="#zero-ad-spend-guarantee"><img src="https://img.shields.io/badge/Ad_Spend-$0_Guaranteed-f59e0b.svg?style=for-the-badge" alt="Zero Ad Spend"></a>
-  <a href="#test-suite"><img src="https://img.shields.io/badge/Tests-56_Passed_100%25-10b981.svg?style=for-the-badge" alt="Tests"></a>
+  <a href="#test-suite"><img src="https://img.shields.io/badge/Tests-92_Passed_100%25-10b981.svg?style=for-the-badge" alt="Tests"></a>
 </p>
 
 ---
@@ -28,62 +28,134 @@ If you are paying Google or Meta to acquire users in 2026, you are on a financia
 3. **Ad Blindness & Cynicism:** Buyers scroll past sponsored banners, use ad-blockers, and distrust sponsored recommendations.
 4. **The AI Search Revolution:** Tech buyers no longer click sponsored Google links; they ask ChatGPT, Perplexity, Gemini, and Claude for product recommendations.
 
-**ZeroCAC fixes this.** Give ZeroCAC your landing page URL and your choice of AI API keys (OpenAI, Gemini, Claude, NVIDIA, DeepSeek). It analyzes your product positioning, dissects competitor weaknesses, and deploys 8 compounding organic distribution engines that drive high-intent customers for **$0 in ad spend**.
+**ZeroCAC fixes this.** Give ZeroCAC your landing page URL. It analyzes your product positioning, dissects competitor weaknesses, and deploys an end-to-end closed-loop operating system: it launches across 8 distribution vectors, deploys live edge tools, captures emails, executes behavioral drip sequences, and self-tunes based on conversion telemetry for **$0 in ad spend**.
 
 ---
 
 ## Comparison: ZeroCAC vs Traditional Channels
 
-| Feature | Meta Ads | Google Ads | Marketing Agency | ZeroCAC (Organic AI) |
+| Feature | Meta Ads | Google Ads | Marketing Agency | ZeroCAC (Organic Closed-Loop AI) |
 | :--- | :--- | :--- | :--- | :--- |
 | **Monthly Ad Spend** | $2,000 - $20,000+ | $3,000 - $50,000+ | $5,000 - $10,000 fee | **$0 (Zero Ad Spend)** |
 | **Residual Asset Equity** | Zero (Dies when stopped) | Zero (Dies when stopped) | Minimal | **Permanent Compounding** |
 | **User Trust Level** | Low (Sponsored Tag) | Low (Ad label) | Variable | **High (Peer Value-First)** |
-| **Answer Engine Ready** | No (Ignored by LLMs) | No (Ignored by LLMs) | Rarely | **Native (Perplexity / SearchGPT)** |
-| **Average Conversion** | 0.8% - 2.1% | 1.5% - 3.2% | 1.0% - 2.5% | **15% - 30% Intent Sniping** |
-| **Speed to Day-1 Traction** | 15 Minutes | 15 Minutes | 2 - 4 weeks | **15 Min (Radar) / 48h (Micro-Tools)** |
+| **Answer Engine Ready** | No (Ignored by LLMs) | No (Ignored by LLMs) | Rarely | **Native (Perplexity / SearchGPT / GEO)** |
+| **Lead Conversion Rate** | 1.5% - 3.0% (Static page) | 2.0% - 3.5% (Static page) | 1.5% - 2.5% | **10% - 20% (Interactive Micro-Tools)** |
+| **Day-1 Traffic Velocity** | Instant (Credit card swipe) | Instant (Credit card swipe) | 2 - 4 weeks | **Instant (~1,050+ Floor via 8 Vectors)** |
+| **Execution Overhead** | High (Continuous ad tuning) | High (Keyword bidding) | Heavy meetings | **Autonomous (1-Click Telegram Approval)** |
 
 ---
 
-## The 8 Autonomous Organic Growth Engines
+## Closed-Loop Execution Architecture
 
-### High-Velocity Velocity Engines (Day 1 to Day 7 Speed)
+ZeroCAC operates as an integrated growth loop rather than a passive text generator:
 
-#### 1. 📡 Live Intent Radar (`zerocac radar`)
-* Scans real-time public feeds across Reddit search JSON, Hacker News Algolia API, and GitHub Issues.
-* Identifies users actively asking *"alternative to [Competitor]"* or *"how to solve X"*.
-* Scores intent (0 to 100) and drafts authentic, zero-BS technical replies that solve the user's issue first before introducing your product.
+```
+[ Target Product URL: e.g. https://yourproduct.com ]
+                      │
+                      ▼
+┌────────────────────────────────────────────────────────┐
+│ 1. Intelligence & Positioning Analyzer                 │
+│    (ICP Personas, Pain Points, Competitor Gaps)        │
+└─────────────────────┬──────────────────────────────────┘
+                      │
+                      ▼
+┌────────────────────────────────────────────────────────┐
+│ 2. The 8 Core Organic Engines                          │
+│    ├── Live Intent Radar (Reddit / HN / GitHub Issues) │
+│    ├── Autonomous Micro-Tool Architect (HTML/JS Apps)  │
+│    ├── Princeton GEO Optimizer (Answer-First + JSON-LD)│
+│    ├── Virality Loop Engine (SVG Badges + K-Factor)    │
+│    ├── Intent Sniper (Social Infiltration Modeling)    │
+│    ├── AEO Comparison Pages (Markdown Alternatives)    │
+│    ├── Viral Narrative Engine (Threads + Video Scripts)│
+│    └── 15x Directory Matrix (SaaSHub, Toolify, BetaList)│
+└─────────────────────┬──────────────────────────────────┘
+                      │
+                      ▼
+┌────────────────────────────────────────────────────────┐
+│ 3. Autonomous Execution & Syndication Layer            │
+│    ├── zerocac launch: 8-Vector Day-1 Carpet Bombing   │
+│    │   (GitHub Repo, Show HN, PH, 5x Reddit, Dev.to)   │
+│    ├── zerocac deploy: Direct Cloudflare Pages API     │
+│    │   + Immediate IndexNow Search Engine Submission   │
+│    ├── zerocac leads: Inbound SQLite Form Gate         │
+│    │   + Resend 3-Stage Behavioral Drip Engine         │
+│    ├── zerocac dispatch: 1-Click Telegram Approval Bot │
+│    │   + Headless CMS Webhooks (Ghost, Webflow, Slack) │
+│    └── zerocac telemetry: Closed-Loop Self-Tuning      │
+│        (Impressions, Clicks, CTR, Auto Headline Rewrite)│
+└────────────────────────────────────────────────────────┘
+```
 
-#### 2. 🛠️ Autonomous Micro-Tool Architect (`zerocac microtool`)
-* Implements the **Engineering-as-Marketing** model (HubSpot Website Grader, Canva Palette Generator, Ahrefs Free Tools).
-* Automatically writes, styles, and exports standalone single-file HTML/CSS/JS calculators and diagnostic utilities.
-* Generates zero-login utilities that capture Day 2 viral traffic on Hacker News and Product Hunt and create permanent high-authority backlinks.
+---
 
-#### 3. 🧠 Princeton Generative Engine Optimization (`zerocac geo`)
-* Based on Princeton KDD benchmark research for Perplexity and ChatGPT Search indexation.
-* Produces strict 40 to 60-word Answer-First definitions, quantitative statistical evidence, and markdown comparison matrices.
-* Generates permissive `robots.txt` configuration for `PerplexityBot` and `OAI-SearchBot` plus complete JSON-LD schemas.
+## The Complete CLI Toolkit
 
-#### 4. 🔄 Product-Led Artifact Virality Engine (`zerocac virality`)
-* Turns every output generated by the product into an organic customer acquisition channel (the Calendly / Loom / Figma model).
-* Renders scalable SVG badges (`powered by [Product] | $0 CAC`), HTML footer snippets, and Markdown README shields.
-* Defines 4-step viral loop cycle time sequences targeting a viral coefficient K > 0.6.
+### 1. Hardened 8-Vector Day-1 Launch (`zerocac launch`)
+Eliminates single-point-of-failure risk by synthesizing and dispatching across GitHub, Hacker News, Product Hunt, Peerlist, 5 distinct subreddits, Dev.to, X, and 15 directories:
+```bash
+# Synthesize complete 8-Vector launch kit
+zerocac launch prepare https://yourproduct.com --out dist_launch
 
-### Compounding Foundation Engines
+# Execute multi-wave launch across all 8 vectors
+zerocac launch execute dist_launch/launch_package.json --dry-run
+```
 
-#### 5. 🎯 The Intent Sniper (`zerocac snipe`)
-* Contextual community infiltration modeling for Reddit (`r/SaaS`, `r/webdev`), Hacker News, and X.
-* Pre-models high-intent buyer pain scenarios and practitioner-to-practitioner answers.
+### 2. Autonomous Edge Deployment (`zerocac deploy`)
+Pushes compiled standalone microtools and Princeton GEO pages directly to live Cloudflare Pages subdomains and triggers immediate Bing/Yandex IndexNow search indexing:
+```bash
+# Deploy a generated micro-tool directly to live edge hosting
+zerocac deploy --file dist_campaign/micro_tools/cac-calculator/index.html --slug cac-calculator
 
-#### 6. 🔍 Answer Engine Optimization (`zerocac aeo`)
-* Generates programmatic comparison pages (`alternative-to-x.md`) and FAQ schema.
+# Or generate and deploy in one step
+zerocac deploy --url https://yourproduct.com --provider cloudflare_pages
+```
 
-#### 7. ⚡ Viral Narrative & Multi-Modal Content Engine (`zerocac viral`)
-* Generates 5-tweet build-in-public threads with retention hooks.
-* Produces 5-slide LinkedIn document carousel scripts and 60-second video scripts with visual and audio cues.
+### 3. Inbound Lead Capture & Behavioral Drip (`zerocac leads` & `zerocac nurture`)
+Generated microtools feature embedded lead capture gates. Captured prospect metrics trigger automated 3-stage educational email sequences via Resend:
+```bash
+# View captured leads pipeline in terminal
+zerocac leads
 
-#### 8. 🚀 100+ Free Directory Multiplier (`zerocac directories`)
-* Formats tailored submission packages adhering strictly to character constraints for 30+ top directories (Product Hunt, BetaList, AlternativeTo, SaaSHub).
+# Dispatch personalized behavioral nurture sequence for a lead
+zerocac nurture lead-123456 --product "YourProduct"
+```
+
+### 4. 1-Click Distribution & Approval Bot (`zerocac dispatch`)
+Eliminates manual copy-pasting. Sends formatted draft cards to Telegram with interactive buttons:
+```bash
+# View pending items awaiting approval
+zerocac dispatch queue
+
+# 1-click approve and fire to target channel (Telegram, Ghost, Webflow, Webhooks)
+zerocac dispatch approve disp-abc12345
+```
+
+### 5. Closed-Loop Telemetry & Self-Tuning (`zerocac telemetry`)
+Tracks real conversions, computes $0 CAC ad savings, and automatically identifies underperforming assets (CTR < 2.0%) to rewrite headlines:
+```bash
+# View aggregated organic ROI, conversion rates, and self-healing actions
+zerocac telemetry
+```
+
+### 6. High-Velocity Velocity Engines
+```bash
+# Scan real-time public feeds for buyer pain points
+zerocac radar https://yourproduct.com
+
+# Generate standalone interactive micro-tool
+zerocac microtool https://yourproduct.com --out dist_tools
+
+# Generate Princeton GEO citation assets for Perplexity & SearchGPT
+zerocac geo https://yourproduct.com
+
+# Generate product-led virality badges and loop mechanics
+zerocac virality https://yourproduct.com
+
+# Execute full foundation campaign
+zerocac run https://yourproduct.com --velocity --out dist_campaign
+```
 
 ---
 
@@ -103,7 +175,7 @@ ZeroCAC features a multi-provider router with dynamic fallback failover:
 
 ## Quickstart in 60 Seconds
 
-### Option 1: Web Control Dashboard (Recommended)
+### Web Control Dashboard (Recommended)
 
 ```bash
 # Clone the repository
@@ -121,74 +193,6 @@ zerocac serve
 # Open http://localhost:8000 in your browser
 ```
 
-### Option 2: Command Line Interface (CLI)
-
-```bash
-# 1. Analyze any product landing page
-zerocac analyze https://yourproduct.com
-
-# 2. Intercept live user pain on Reddit & Hacker News
-zerocac radar https://yourproduct.com
-
-# 3. Generate standalone interactive micro-tool (Engineering-as-Marketing)
-zerocac microtool https://yourproduct.com --out dist_tools
-
-# 4. Generate Princeton GEO citation assets for Perplexity & SearchGPT
-zerocac geo https://yourproduct.com
-
-# 5. Generate product-led virality badges and loop mechanics
-zerocac virality https://yourproduct.com
-
-# 6. Deploy the complete high-velocity pipeline and export all assets
-zerocac run https://yourproduct.com --velocity --out dist_campaign
-```
-
-### Option 3: Docker Compose
-
-```bash
-docker compose up -d
-# Dashboard running at http://localhost:8000
-```
-
----
-
-## Architecture
-
-```
-[Target Product URL / Pitch]
-            │
-            ▼
-┌────────────────────────────────────────┐
-│ 1. Web Scraper & DOM Extractor         │
-│    (Title, Meta, Headers, CTAs, Price) │
-└──────────────────┬─────────────────────┘
-                   │
-                   ▼
-┌────────────────────────────────────────┐
-│ 2. Product Intelligence Analyzer       │
-│    (UVP, ICP Personas, Competitor Gaps)│
-└──────────────────┬─────────────────────┘
-                   │
-                   ▼
-┌────────────────────────────────────────────────────────┐
-│ 3. The 8 Autonomous Organic Growth Engines             │
-│   ├── Engine 1: Live Intent Radar (Reddit/HN/GitHub)   │
-│   ├── Engine 2: Micro-Tool Architect (HTML/JS Apps)    │
-│   ├── Engine 3: Princeton GEO (Perplexity/SearchGPT)   │
-│   ├── Engine 4: Virality Loops (SVG Badges/K-Factor)   │
-│   ├── Engine 5: Intent Sniper (Social Infiltration)    │
-│   ├── Engine 6: AEO Pages (Markdown Comparisons)       │
-│   ├── Engine 7: Viral Narrative (Threads & Scripts)    │
-│   └── Engine 8: 100+ Free Directory Multiplier         │
-└──────────────────┬─────────────────────┘
-                   │
-                   ▼
-┌────────────────────────────────────────┐
-│ 4. Human-in-the-Loop Review Dashboard  │
-│    (One-Click Copy, Export & Staging)  │
-└────────────────────────────────────────┘
-```
-
 ---
 
 ## Project Structure
@@ -202,20 +206,16 @@ zerocac/
 │   ├── crawler/                     # Web scraper and DOM feature extractor
 │   ├── analyzer/                    # Positioning and ICP synthesis engine
 │   ├── engines/                     # Radar, Micro-Tool, GEO, Virality, Sniper, AEO, Narrative, Directory
-│   ├── web/                         # FastAPI application and responsive dark-theme dashboard
+│   ├── deployers/                   # Cloudflare Pages edge deployer and IndexNow protocol client
+│   ├── leads/                       # SQLite lead repository, form injector, and Resend drip engine
+│   ├── dispatchers/                 # Telegram 1-click approval bot, CMS webhooks, and dispatch queue
+│   ├── telemetry/                   # GSC/PostHog analytics ingestion and headline self-healing
+│   ├── launch/                      # Hardened 8-Vector Day-1 Launch Carpet Bombing Orchestrator
+│   ├── web/                         # FastAPI application and modular REST routers
 │   ├── cli.py                       # Typer-powered terminal CLI
 │   └── config.py                    # Pydantic v2 settings manager
-└── tests/                           # 56 unit and integration tests (100% pass rate)
+└── tests/                           # 92 unit and integration tests (100% pass rate in ~4.5s)
 ```
-
----
-
-## Community & Contributing
-
-We welcome contributions from developers, growth marketers, and open-source advocates.
-* **Code of Conduct:** Please review our [Code of Conduct](CODE_OF_CONDUCT.md).
-* **Contributing Guide:** See [CONTRIBUTING.md](CONTRIBUTING.md) for branch naming and PR standards.
-* **Security Policy:** See [SECURITY.md](SECURITY.md) for vulnerability reporting.
 
 ---
 
