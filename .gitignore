@@ -7,6 +7,8 @@ __pycache__/
 dist/
 dist_campaign/
 dist_tools/
+dist_launch/
+dist_pseo/
 .zerocac/
 build/
 *.egg-info/

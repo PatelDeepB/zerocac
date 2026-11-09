@@ -15,7 +15,7 @@
   <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.11%20%7C%203.12-6366f1.svg?style=for-the-badge" alt="Python"></a>
   <a href="#supported-frontier-models"><img src="https://img.shields.io/badge/Frontier_Models-OpenAI_GPT--6_|_Gemini_4_|_Claude_5.5_|_Nemotron-06b6d4.svg?style=for-the-badge" alt="AI Models"></a>
   <a href="#zero-ad-spend-guarantee"><img src="https://img.shields.io/badge/Ad_Spend-$0_Guaranteed-f59e0b.svg?style=for-the-badge" alt="Zero Ad Spend"></a>
-  <a href="#test-suite"><img src="https://img.shields.io/badge/Tests-92_Passed_100%25-10b981.svg?style=for-the-badge" alt="Tests"></a>
+  <a href="#test-suite"><img src="https://img.shields.io/badge/Tests-103_Passed_100%25-10b981.svg?style=for-the-badge" alt="Tests"></a>
 </p>
 
 ---
@@ -77,6 +77,8 @@ ZeroCAC operates as an integrated growth loop rather than a passive text generat
 │ 3. Autonomous Execution & Syndication Layer            │
 │    ├── zerocac launch: 8-Vector Day-1 Carpet Bombing   │
 │    │   (GitHub Repo, Show HN, PH, 5x Reddit, Dev.to)   │
+│    ├── zerocac pseo: Programmatic SEO Matrix Engine    │
+│    │   (Competitor Alts, Regional Hubs, Calculators)   │
 │    ├── zerocac deploy: Direct Cloudflare Pages API     │
 │    │   + Immediate IndexNow Search Engine Submission   │
 │    ├── zerocac leads: Inbound SQLite Form Gate         │
@@ -102,7 +104,17 @@ zerocac launch prepare https://yourproduct.com --out dist_launch
 zerocac launch execute dist_launch/launch_package.json --dry-run
 ```
 
-### 2. Autonomous Edge Deployment (`zerocac deploy`)
+### 2. Programmatic SEO Matrix Engine (`zerocac pseo`)
+Generates high-converting programmatic landing page clusters across 3 validated axes (Competitor Alternatives, Regional Hubs, Role Calculators) with Trojan Horse objective teardowns, embedded reactive tools, zero orphan internal linking mesh, and batch IndexNow submission:
+```bash
+# Synthesize multi-axis programmatic SEO cluster
+zerocac pseo generate https://yourproduct.com --count 15 --out dist_pseo
+
+# Deploy matrix to edge hosting, mount reverse proxy routes, and batch submit IndexNow
+zerocac pseo deploy dist_pseo/pseo_package.json --dry-run
+```
+
+### 3. Autonomous Edge Deployment (`zerocac deploy`)
 Pushes compiled standalone microtools and Princeton GEO pages directly to live Cloudflare Pages subdomains and triggers immediate Bing/Yandex IndexNow search indexing:
 ```bash
 # Deploy a generated micro-tool directly to live edge hosting
@@ -112,7 +124,7 @@ zerocac deploy --file dist_campaign/micro_tools/cac-calculator/index.html --slug
 zerocac deploy --url https://yourproduct.com --provider cloudflare_pages
 ```
 
-### 3. Inbound Lead Capture & Behavioral Drip (`zerocac leads` & `zerocac nurture`)
+### 4. Inbound Lead Capture & Behavioral Drip (`zerocac leads` & `zerocac nurture`)
 Generated microtools feature embedded lead capture gates. Captured prospect metrics trigger automated 3-stage educational email sequences via Resend:
 ```bash
 # View captured leads pipeline in terminal
@@ -122,7 +134,7 @@ zerocac leads
 zerocac nurture lead-123456 --product "YourProduct"
 ```
 
-### 4. 1-Click Distribution & Approval Bot (`zerocac dispatch`)
+### 5. 1-Click Distribution & Approval Bot (`zerocac dispatch`)
 Eliminates manual copy-pasting. Sends formatted draft cards to Telegram with interactive buttons:
 ```bash
 # View pending items awaiting approval
@@ -132,14 +144,14 @@ zerocac dispatch queue
 zerocac dispatch approve disp-abc12345
 ```
 
-### 5. Closed-Loop Telemetry & Self-Tuning (`zerocac telemetry`)
+### 6. Closed-Loop Telemetry & Self-Tuning (`zerocac telemetry`)
 Tracks real conversions, computes $0 CAC ad savings, and automatically identifies underperforming assets (CTR < 2.0%) to rewrite headlines:
 ```bash
 # View aggregated organic ROI, conversion rates, and self-healing actions
 zerocac telemetry
 ```
 
-### 6. High-Velocity Velocity Engines
+### 7. High-Velocity Velocity Engines
 ```bash
 # Scan real-time public feeds for buyer pain points
 zerocac radar https://yourproduct.com
@@ -211,10 +223,11 @@ zerocac/
 │   ├── dispatchers/                 # Telegram 1-click approval bot, CMS webhooks, and dispatch queue
 │   ├── telemetry/                   # GSC/PostHog analytics ingestion and headline self-healing
 │   ├── launch/                      # Hardened 8-Vector Day-1 Launch Carpet Bombing Orchestrator
+│   ├── pseo/                        # Programmatic SEO Matrix Engine (3 axes, search validation, mesh)
 │   ├── web/                         # FastAPI application and modular REST routers
 │   ├── cli.py                       # Typer-powered terminal CLI
 │   └── config.py                    # Pydantic v2 settings manager
-└── tests/                           # 92 unit and integration tests (100% pass rate in ~4.5s)
+└── tests/                           # 103 unit and integration tests (100% pass rate in ~4s)
 ```
 
 ---
