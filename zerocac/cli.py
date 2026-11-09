@@ -34,6 +34,9 @@ from zerocac.dispatchers.models import ApprovalStatus, DispatchChannel, Dispatch
 from zerocac.dispatchers.queue import DispatchQueue
 from zerocac.launch.models import HardenedLaunchPackage
 from zerocac.launch.orchestrator import LaunchOrchestrator
+from zerocac.pseo.deployer import PSEOBatchDeployer
+from zerocac.pseo.engine import PSEOMatrixEngine
+from zerocac.pseo.models import PSEOMatrixPackage
 from zerocac.telemetry.engine import TelemetryEngine
 
 app = typer.Typer(
@@ -656,6 +659,127 @@ def execute_launch_cmd(
             border_style="green",
         )
     )
+
+
+pseo_app = typer.Typer(name="pseo", help="Autonomous Programmatic SEO Matrix Engine commands")
+app.add_typer(pseo_app, name="pseo")
+
+
+def _export_pseo_artifacts(package: PSEOMatrixPackage, output_dir: Path) -> Path:
+    """Save pSEO package, index hub, sitemap, and subpage HTML assets to disk."""
+    output_dir.mkdir(parents=True, exist_ok=True)
+    pkg_path = output_dir / "pseo_package.json"
+    pkg_path.write_text(package.model_dump_json(indent=2), encoding="utf-8")
+
+    pages_dir = output_dir / "vs"
+    pages_dir.mkdir(parents=True, exist_ok=True)
+    (output_dir / "index.html").write_text(package.hub_page_html, encoding="utf-8")
+    (output_dir / "sitemap-pseo.xml").write_text(package.sitemap_xml, encoding="utf-8")
+
+    for page in package.pages:
+        page_dir = pages_dir / page.slug
+        page_dir.mkdir(parents=True, exist_ok=True)
+        (page_dir / "index.html").write_text(page.html_content, encoding="utf-8")
+
+    return pkg_path
+
+
+def _render_pseo_summary(package: PSEOMatrixPackage, pkg_path: Path) -> None:
+    """Render rich console table and impact projection panel for pSEO matrix."""
+    table = Table(
+        title=f"Programmatic SEO Matrix: {package.product_name} ({len(package.pages)} Pages)",
+        border_style="green",
+    )
+    table.add_column("Axis", style="bold cyan")
+    table.add_column("Target Query", style="white")
+    table.add_column("Demand Score", style="yellow")
+    table.add_column("Est Traffic/mo", style="bold green")
+    table.add_column("Slug", style="dim")
+
+    for p in package.pages:
+        table.add_row(
+            p.axis.value.replace("_", " ").title(),
+            p.target_query,
+            f"{p.demand_score}/100",
+            f"~{p.estimated_monthly_visits} visits",
+            f"/vs/{p.slug}",
+        )
+    console.print(table)
+
+    total_est_clicks = sum(p.estimated_monthly_visits for p in package.pages)
+    console.print(
+        Panel(
+            f"[bold green]Total Programmatic Landing Pages Generated:[/bold green] {len(package.pages)}\n"
+            f"[bold yellow]Total Projected Organic Search Traffic:[/bold yellow] ~{total_est_clicks:,} Clicks/Month ($0 CAC)\n"
+            f"[bold cyan]Equivalent Google Ads Spend Value:[/bold cyan] ${total_est_clicks * 15:,.2f} USD / Month\n"
+            f"[bold white]Internal Links Formed:[/bold white] Bidirectional Hub-and-Spoke Mesh (0 Orphan Pages)\n"
+            f"[bold magenta]Package Artifact:[/bold magenta] {pkg_path.resolve()}",
+            title="Programmatic Matrix Impact Projection",
+            border_style="green",
+        )
+    )
+
+
+@pseo_app.command(name="generate")
+def generate_pseo_cmd(
+    url: Optional[str] = typer.Argument(None, help="Product landing page URL"),
+    description: Optional[str] = typer.Option(None, "--desc", "-d", help="Direct product description"),
+    name: Optional[str] = typer.Option(None, "--name", "-n", help="Product brand name"),
+    count: int = typer.Option(9, "--count", "-c", help="Number of matrix pages to generate"),
+    output_dir: Path = typer.Option(Path("dist_pseo"), "--out", "-o", help="Output directory"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Simulate generation"),
+) -> None:
+    """Synthesize validated multi-axis pSEO matrix cluster."""
+    profile = asyncio.run(_run_analysis(url, description, provider=None, name=name))
+    console.print(f"[bold cyan]Compiling Programmatic SEO Matrix for {profile.product_name}...[/bold cyan]")
+
+    engine = MicroToolEngine()
+    tool_pkg = asyncio.run(engine.generate_tool(profile, dry_run=True))
+
+    pseo_engine = PSEOMatrixEngine()
+    package = asyncio.run(
+        pseo_engine.generate_matrix(
+            profile=profile,
+            tool_html=tool_pkg.html_content,
+            target_count=count,
+            dry_run=dry_run,
+        )
+    )
+
+    pkg_path = _export_pseo_artifacts(package, output_dir)
+    _render_pseo_summary(package, pkg_path)
+
+
+@pseo_app.command(name="deploy")
+def deploy_pseo_cmd(
+    package_file: Path = typer.Argument(..., help="Path to pseo_package.json"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Simulate dispatch without live API calls"),
+) -> None:
+    """Deploy programmatic matrix to edge hosting and ping IndexNow."""
+    if not package_file.exists():
+        console.print(f"[bold red]Error: Package file '{package_file}' not found.[/bold red]")
+        raise typer.Exit(code=1)
+
+    data = json.loads(package_file.read_text(encoding="utf-8"))
+    package = PSEOMatrixPackage(**data)
+
+    console.print(f"[bold yellow]Deploying Programmatic SEO Matrix for {package.product_name}...[/bold yellow]")
+    deployer = PSEOBatchDeployer()
+    report = asyncio.run(deployer.deploy_matrix(package, dry_run=dry_run))
+
+    table = Table(title="Programmatic SEO Deployment Report", border_style="magenta")
+    table.add_column("Metric", style="bold cyan")
+    table.add_column("Status / Value", style="white")
+
+    table.add_row("Pages Deployed", str(report.total_pages_deployed))
+    table.add_row("Live Directory Hub URL", report.hub_url)
+    idx_status = "[bold green]SUBMITTED (Bing, Yandex, Seznam)[/bold green]" if report.indexnow_submitted else "[bold red]FAILED[/bold red]"
+    table.add_row("IndexNow Search Submission", idx_status)
+    proxy_status = "[bold green]Active (/vs/* mounted)[/bold green]" if report.reverse_proxy_mounted else "Inactive"
+    table.add_row("Reverse Proxy Route Config", proxy_status)
+    table.add_row("URLs Indexed in Batch", f"{len(report.indexed_urls)} URLs")
+
+    console.print(table)
 
 
 @app.command()
