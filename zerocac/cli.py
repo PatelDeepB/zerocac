@@ -3,7 +3,7 @@
 import asyncio
 import json
 from pathlib import Path
-from typing import Optional
+from typing import Any, Dict, List, Optional
 import typer
 import uvicorn
 from rich.console import Console
@@ -32,6 +32,13 @@ from zerocac.leads.nurture import NurtureEngine
 from zerocac.leads.repository import LeadRepository
 from zerocac.dispatchers.models import ApprovalStatus, DispatchChannel, DispatchItem
 from zerocac.dispatchers.queue import DispatchQueue
+from zerocac.interceptor.engine import CommunityInterceptorEngine
+from zerocac.interceptor.models import (
+    IntentClassification,
+    InterceptOpportunity,
+    SocialPlatform,
+    StealthMode,
+)
 from zerocac.launch.models import HardenedLaunchPackage
 from zerocac.launch.orchestrator import LaunchOrchestrator
 from zerocac.pseo.deployer import PSEOBatchDeployer
@@ -780,6 +787,128 @@ def deploy_pseo_cmd(
     table.add_row("URLs Indexed in Batch", f"{len(report.indexed_urls)} URLs")
 
     console.print(table)
+
+
+intercept_app = typer.Typer(name="intercept", help="Direct Social & Community Intent Interceptor commands")
+app.add_typer(intercept_app, name="intercept")
+
+
+def _render_intercept_scan_table(opportunities: List[InterceptOpportunity]) -> None:
+    """Render rich console table of detected buyer opportunities."""
+    table = Table(title=f"Detected High-Intent Buyer Opportunities ({len(opportunities)})", border_style="green")
+    table.add_column("Opportunity ID", style="bold cyan")
+    table.add_column("Platform / Topic", style="white")
+    table.add_column("Score", style="yellow")
+    table.add_column("Intent Category", style="magenta")
+    table.add_column("Competitor", style="bold red")
+    table.add_column("Thread Title", style="white")
+
+    for opp in opportunities:
+        table.add_row(
+            opp.opportunity_id,
+            f"{opp.platform.value} ({opp.subreddit_or_topic})",
+            f"{opp.intent_score}/100",
+            opp.classification.value.replace("_", " ").title(),
+            opp.detected_competitor or "-",
+            opp.title[:38],
+        )
+    console.print(table)
+
+    if opportunities:
+        top = opportunities[0]
+        console.print(
+            Panel(
+                f"[bold cyan]Target Post:[/bold cyan] {top.title}\n"
+                f"[bold yellow]Author:[/bold yellow] u/{top.author} | [bold green]Score:[/bold green] {top.intent_score}/100\n"
+                f"[bold magenta]Stealth Strategy:[/bold magenta] {top.stealth_mode.value}\n\n"
+                f"[bold white]Drafted Practitioner Response:[/bold white]\n{top.synthesized_reply}",
+                title=f"Top Priority Intercept Draft [{top.opportunity_id}]",
+                border_style="cyan",
+            )
+        )
+
+
+@intercept_app.command(name="scan")
+def scan_intercept_cmd(
+    url: Optional[str] = typer.Argument(None, help="Product landing page URL"),
+    description: Optional[str] = typer.Option(None, "--desc", "-d", help="Direct product description"),
+    name: Optional[str] = typer.Option(None, "--name", "-n", help="Product brand name"),
+    subreddits: Optional[str] = typer.Option(None, "--subs", "-s", help="Comma-separated target subreddits"),
+    min_score: int = typer.Option(75, "--min-score", "-m", help="Minimum qualifying intent score"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Simulate feed scan"),
+) -> None:
+    """Scan live social feeds for qualified buyer purchase signals."""
+    profile = asyncio.run(_run_analysis(url, description, provider=None, name=name))
+    console.print(f"[bold cyan]Scanning live social streams for {profile.product_name}...[/bold cyan]")
+
+    subs_list = [s.strip() for s in subreddits.split(",")] if subreddits else None
+    engine = CommunityInterceptorEngine()
+    opportunities = asyncio.run(
+        engine.scan_opportunities(
+            profile=profile,
+            tool_url=url or f"https://{profile.product_name.lower().replace(' ', '-')}.pages.dev",
+            subreddits=subs_list,
+            min_score=min_score,
+            dry_run=dry_run,
+        )
+    )
+
+    _render_intercept_scan_table(opportunities)
+
+
+@intercept_app.command(name="reply")
+def reply_intercept_cmd(
+    opportunity_id: str = typer.Argument(..., help="Opportunity identifier"),
+    url: str = typer.Option(..., "--url", "-u", help="Direct URL of the target thread"),
+    text: str = typer.Option(..., "--text", "-t", help="Reply text to dispatch"),
+    platform: str = typer.Option("reddit", "--platform", "-p", help="Target platform"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="Simulate dispatch without live API call"),
+) -> None:
+    """Dispatch practitioner response to live platform thread."""
+    plat_enum = SocialPlatform(platform.lower())
+    opp = InterceptOpportunity(
+        opportunity_id=opportunity_id,
+        platform=plat_enum,
+        post_id=opportunity_id,
+        post_url=url,
+        subreddit_or_topic="general",
+        author="target_user",
+        title="Target buyer thread",
+        body_text="Looking for alternative",
+        created_at_utc="2026-11-09T10:00:00Z",
+        intent_score=85,
+        classification=IntentClassification.IMMEDIATE_MIGRATION,
+        synthesized_reply=text,
+    )
+
+    engine = CommunityInterceptorEngine()
+    console.print(f"[bold yellow]Dispatching reply to {plat_enum.value} ({opportunity_id})...[/bold yellow]")
+    res = asyncio.run(engine.dispatch_reply(opp, dry_run=dry_run))
+
+    if res.success:
+        console.print(f"[bold green]Successfully dispatched to {res.platform.value}![/bold green] (URL: {res.live_comment_url})")
+    else:
+        console.print(f"[bold red]Dispatch failed:[/bold red] {res.error_message}")
+        raise typer.Exit(code=1)
+
+
+@intercept_app.command(name="telemetry")
+def intercept_telemetry_cmd() -> None:
+    """View community interception conversions and displaced Google Ads spend."""
+    engine = CommunityInterceptorEngine()
+    summary = engine.get_telemetry_summary()
+
+    console.print(
+        Panel(
+            f"[bold green]Total Opportunities Detected:[/bold green] {summary['total_opportunities_detected']}\n"
+            f"[bold yellow]Total Responses Dispatched:[/bold yellow] {summary['total_dispatched']}\n"
+            f"[bold cyan]Estimated Inbound Organic Clicks:[/bold cyan] ~{summary['estimated_inbound_clicks']:,}\n"
+            f"[bold green]Qualified Leads Acquired ($0 CAC):[/bold green] ~{summary['estimated_leads_acquired']:,}\n"
+            f"[bold magenta]Equivalent Ad Spend Displaced:[/bold magenta] ${summary['estimated_ad_savings_usd']:,.2f} USD",
+            title="Community Interceptor Impact & Ad Displacement",
+            border_style="green",
+        )
+    )
 
 
 @app.command()

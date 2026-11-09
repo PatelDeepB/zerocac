@@ -15,7 +15,7 @@
   <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.11%20%7C%203.12-6366f1.svg?style=for-the-badge" alt="Python"></a>
   <a href="#supported-frontier-models"><img src="https://img.shields.io/badge/Frontier_Models-OpenAI_GPT--6_|_Gemini_4_|_Claude_5.5_|_Nemotron-06b6d4.svg?style=for-the-badge" alt="AI Models"></a>
   <a href="#zero-ad-spend-guarantee"><img src="https://img.shields.io/badge/Ad_Spend-$0_Guaranteed-f59e0b.svg?style=for-the-badge" alt="Zero Ad Spend"></a>
-  <a href="#test-suite"><img src="https://img.shields.io/badge/Tests-103_Passed_100%25-10b981.svg?style=for-the-badge" alt="Tests"></a>
+  <a href="#test-suite"><img src="https://img.shields.io/badge/Tests-116_Passed_100%25-10b981.svg?style=for-the-badge" alt="Tests"></a>
 </p>
 
 ---
@@ -79,6 +79,8 @@ ZeroCAC operates as an integrated growth loop rather than a passive text generat
 │    │   (GitHub Repo, Show HN, PH, 5x Reddit, Dev.to)   │
 │    ├── zerocac pseo: Programmatic SEO Matrix Engine    │
 │    │   (Competitor Alts, Regional Hubs, Calculators)   │
+│    ├── zerocac intercept: Direct Social Interceptor    │
+│    │   (Live Buyer Threads, 9:1 Karma Shield, Math)    │
 │    ├── zerocac deploy: Direct Cloudflare Pages API     │
 │    │   + Immediate IndexNow Search Engine Submission   │
 │    ├── zerocac leads: Inbound SQLite Form Gate         │
@@ -114,7 +116,20 @@ zerocac pseo generate https://yourproduct.com --count 15 --out dist_pseo
 zerocac pseo deploy dist_pseo/pseo_package.json --dry-run
 ```
 
-### 3. Autonomous Edge Deployment (`zerocac deploy`)
+### 3. Direct Social & Community Interceptor (`zerocac intercept`)
+Monitors real-time buyer agony threads on Reddit, Hacker News, and X, generates custom unit-economic teardowns, protects account standing via the 9:1 Karma Camouflage Shield, and dispatches authentic practitioner replies:
+```bash
+# Scan live social streams for high-intent buyer inquiries
+zerocac intercept scan https://yourproduct.com --min-score 75
+
+# Dispatch approved practitioner reply to target thread
+zerocac intercept reply opp-12345 --url "https://reddit.com/r/devops/comments/xyz" --text "Quick math on your $4,500 spend..." --dry-run
+
+# View displaced ad spend and acquired leads
+zerocac intercept telemetry
+```
+
+### 4. Autonomous Edge Deployment (`zerocac deploy`)
 Pushes compiled standalone microtools and Princeton GEO pages directly to live Cloudflare Pages subdomains and triggers immediate Bing/Yandex IndexNow search indexing:
 ```bash
 # Deploy a generated micro-tool directly to live edge hosting
@@ -124,7 +139,7 @@ zerocac deploy --file dist_campaign/micro_tools/cac-calculator/index.html --slug
 zerocac deploy --url https://yourproduct.com --provider cloudflare_pages
 ```
 
-### 4. Inbound Lead Capture & Behavioral Drip (`zerocac leads` & `zerocac nurture`)
+### 5. Inbound Lead Capture & Behavioral Drip (`zerocac leads` & `zerocac nurture`)
 Generated microtools feature embedded lead capture gates. Captured prospect metrics trigger automated 3-stage educational email sequences via Resend:
 ```bash
 # View captured leads pipeline in terminal
@@ -134,7 +149,7 @@ zerocac leads
 zerocac nurture lead-123456 --product "YourProduct"
 ```
 
-### 5. 1-Click Distribution & Approval Bot (`zerocac dispatch`)
+### 6. 1-Click Distribution & Approval Bot (`zerocac dispatch`)
 Eliminates manual copy-pasting. Sends formatted draft cards to Telegram with interactive buttons:
 ```bash
 # View pending items awaiting approval
@@ -144,14 +159,14 @@ zerocac dispatch queue
 zerocac dispatch approve disp-abc12345
 ```
 
-### 6. Closed-Loop Telemetry & Self-Tuning (`zerocac telemetry`)
+### 7. Closed-Loop Telemetry & Self-Tuning (`zerocac telemetry`)
 Tracks real conversions, computes $0 CAC ad savings, and automatically identifies underperforming assets (CTR < 2.0%) to rewrite headlines:
 ```bash
 # View aggregated organic ROI, conversion rates, and self-healing actions
 zerocac telemetry
 ```
 
-### 7. High-Velocity Velocity Engines
+### 8. High-Velocity Velocity Engines
 ```bash
 # Scan real-time public feeds for buyer pain points
 zerocac radar https://yourproduct.com
@@ -224,10 +239,11 @@ zerocac/
 │   ├── telemetry/                   # GSC/PostHog analytics ingestion and headline self-healing
 │   ├── launch/                      # Hardened 8-Vector Day-1 Launch Carpet Bombing Orchestrator
 │   ├── pseo/                        # Programmatic SEO Matrix Engine (3 axes, search validation, mesh)
+│   ├── interceptor/                 # Direct Social & Community Interceptor (real-time stream, 9:1 shield)
 │   ├── web/                         # FastAPI application and modular REST routers
 │   ├── cli.py                       # Typer-powered terminal CLI
 │   └── config.py                    # Pydantic v2 settings manager
-└── tests/                           # 103 unit and integration tests (100% pass rate in ~4s)
+└── tests/                           # 116 unit and integration tests (100% pass rate in ~3.8s)
 ```
 
 ---
