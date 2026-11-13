@@ -253,7 +253,7 @@ zerocac/
 │   ├── web/                         # FastAPI application and modular REST routers
 │   ├── cli.py                       # Typer-powered terminal CLI
 │   └── config.py                    # Pydantic v2 settings manager
-└── tests/                           # 133 unit and integration tests (100% pass rate in ~3.8s)
+└── tests/                           # 140 unit and integration tests (100% pass rate in ~3.8s)
 ```
 
 ---

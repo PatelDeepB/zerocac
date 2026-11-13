@@ -47,7 +47,10 @@ from zerocac.pseo.deployer import PSEOBatchDeployer
 from zerocac.pseo.engine import PSEOMatrixEngine
 from zerocac.pseo.models import PSEOMatrixPackage
 from zerocac.telemetry.engine import TelemetryEngine
+from zerocac.telemetry.experiment import ExperimentEngine
+from zerocac.telemetry.store import ExperimentStore
 from zerocac.virality.tracker import ReferralTracker
+
 
 
 app = typer.Typer(
@@ -632,6 +635,71 @@ def view_telemetry() -> None:
                 a.recommended_action.value.replace("_", " ").title(),
             )
         console.print(table)
+
+
+@app.command(name="experiment")
+def experiment_cmd(
+    slug: str = typer.Argument(..., help="Asset slug to test e.g. b2b-saas-calculator"),
+    title: str = typer.Option("B2B SaaS Growth Calculator", "--title", "-t", help="Base headline"),
+    category: str = typer.Option("Developer Tool", "--category", "-c", help="Product category"),
+    optimize: bool = typer.Option(False, "--optimize", help="Run multi-armed bandit 80/20 reallocation"),
+) -> None:
+    """Generate or inspect multi-variant A/B headline experiment with bandit allocation."""
+    store = ExperimentStore()
+    exp = asyncio.run(store.get_experiment(slug))
+    if not exp:
+        exp = ExperimentEngine.generate_experiment(slug, title, category)
+        asyncio.run(store.save_experiment(exp))
+        console.print(f"[bold green]Synthesized 3 distinct angle variants for '{slug}'[/bold green]")
+
+    if optimize:
+        actions = ExperimentEngine.optimize_allocations(exp)
+        asyncio.run(store.save_experiment(exp))
+        for act in actions:
+            console.print(f"[bold cyan]Action:[/bold cyan] {act}")
+
+    table = Table(title=f"A/B Headline Experiment: {slug}", border_style="cyan")
+    table.add_column("Variant ID", style="dim")
+    table.add_column("Angle", style="bold yellow")
+    table.add_column("Headline", style="white")
+    table.add_column("Traffic Share", style="bold green")
+    table.add_column("CTR / Conv", style="magenta")
+
+    for v in exp.variants:
+        table.add_row(
+            v.variant_id,
+            v.angle.value.upper(),
+            v.headline[:45] + "...",
+            f"{v.traffic_allocation_pct:.1f}%",
+            f"{v.ctr:.1f}% / {v.conversion_rate:.1f}%",
+        )
+    console.print(table)
+
+
+@app.command(name="roi")
+def roi_cmd(
+    visitors: int = typer.Option(14280, "--visitors", "-v", help="Total organic visitors"),
+    leads: int = typer.Option(42, "--leads", "-l", help="Total qualified leads"),
+    cpc: float = typer.Option(35.0, "--cpc", help="Benchmark search CPC in USD"),
+    cpl: float = typer.Option(180.0, "--cpl", help="Benchmark qualified lead CPL in USD"),
+) -> None:
+    """Calculate mathematically rigorous displacement of Google/Meta paid advertising."""
+    metrics = ExperimentEngine.calculate_empirical_roi(visitors, leads, cpc, cpl)
+
+    console.print(
+        Panel(
+            f"[bold green]Empirical Organic Ad Spend Displacement Proof[/bold green]\n\n"
+            f"[bold cyan]Organic Visitors Driven:[/bold cyan] {metrics['organic_visitors']:,} (@ ${metrics['benchmark_cpc_usd']} CPC)\n"
+            f"[bold green]Traffic Value Displaced:[/bold green] ${metrics['traffic_displacement_usd']:,.2f} USD\n\n"
+            f"[bold cyan]Qualified Leads Captured:[/bold cyan] {metrics['leads_captured']:,} (@ ${metrics['benchmark_cpl_usd']} CPL)\n"
+            f"[bold green]Lead Acquisition Value Displaced:[/bold green] ${metrics['lead_displacement_usd']:,.2f} USD\n\n"
+            f"[bold magenta]Total Displaced Paid Ad Spend:[/bold magenta] [bold green]${metrics['total_ad_dollars_saved_usd']:,.2f} USD[/bold green]\n"
+            f"[dim]Formula: Total Saved = (Visitors x CPC) + (Leads x CPL)[/dim]",
+            title="ZeroCAC Mathematical ROI Engine",
+            border_style="green",
+        )
+    )
+
 
 
 launch_app = typer.Typer(name="launch", help="Autonomous 8-Vector Day-1 Launch Carpet Bombing commands")
