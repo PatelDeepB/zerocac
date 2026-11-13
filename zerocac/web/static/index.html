@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ZeroCAC: Autonomous AI Marketing Agent ($0 CAC)</title>
+  <title>ZeroCAC: Autonomous AI Marketing Mission Control ($0 CAC)</title>
   <link rel="stylesheet" href="/static/style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,13 +16,13 @@
       <div class="header-brand">
         <div class="brand-logo">0</div>
         <div>
-          <h1 class="brand-title">ZeroCAC</h1>
-          <p class="brand-subtitle">Autonomous Organic Growth Agent</p>
+          <h1 class="brand-title">ZeroCAC Mission Control</h1>
+          <p class="brand-subtitle">Autonomous Organic Growth Operating System</p>
         </div>
       </div>
       <div class="header-badges">
         <span class="badge badge-success">v0.2.0</span>
-        <span class="badge badge-neutral" id="active-provider-badge">Provider: Frontier Router</span>
+        <span class="badge badge-neutral" id="active-provider-badge">Frontier AI Router</span>
         <a href="https://github.com/PatelDeepB/zerocac" target="_blank" class="github-btn" rel="noreferrer">
           <svg height="16" width="16" viewBox="0 0 16 16" fill="currentColor">
             <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
@@ -32,37 +32,65 @@
       </div>
     </header>
 
+    <!-- Mission Control Top Stats Bar -->
+    <section class="stats-grid" id="mission-stats-grid">
+      <div class="stat-card">
+        <span class="stat-label">Organic Visitors (Day-1)</span>
+        <div class="stat-val stat-val-green" id="stat-visitors">14,280+</div>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">8 Syndication Vectors</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Ad Dollars Saved (@ $35 CPC)</span>
+        <div class="stat-val stat-val-green" id="stat-savings">$15,400+</div>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">Permanent Compounding Equity</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Buyer Intent Signals</span>
+        <div class="stat-val stat-val-indigo" id="stat-intercepts">18 Active</div>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">Reddit, HN, and X</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-label">Anti-Ban Karma Shield</span>
+        <div class="stat-val stat-val-yellow" id="stat-karma">9:1 Safe (100%)</div>
+        <span style="font-size: 0.75rem; color: var(--text-muted);">Multi-Account Camouflage</span>
+      </div>
+    </section>
+
     <!-- Main Workspace -->
     <main class="app-main">
       <!-- Intake Card -->
       <section class="card intake-card">
-        <h2 class="card-heading">Stop Burning Money on Paid Ads</h2>
-        <p class="card-subheading">Enter your landing page URL or describe your product. ZeroCAC analyzes your positioning and deploys compounding high-velocity organic growth engines.</p>
+        <h2 class="card-heading">Autonomous Organic Distribution vs Paid Ads</h2>
+        <p class="card-subheading">Enter your landing page URL or load demo data. ZeroCAC extracts positioning, generates programmatic landing pages, scans live community purchase agony, and coordinates launch waves.</p>
 
         <form id="marketing-form" class="marketing-form">
           <div class="form-row">
             <div class="input-group flex-1">
               <label for="product-url">Product Landing Page URL</label>
-              <input type="url" id="product-url" placeholder="https://yourproduct.com" required>
+              <input type="url" id="product-url" placeholder="https://yourproduct.com" required value="https://zerocac.org">
             </div>
             <div class="input-group">
               <label for="ai-provider-select">AI Reasoning Engine</label>
               <select id="ai-provider-select">
-                <option value="openai">OpenAI (GPT-6 Astra / Luna)</option>
-                <option value="gemini">Google (Gemini 4 / 3.8 Flash)</option>
-                <option value="claude">Anthropic (Claude 5.5 Opus/Sonnet)</option>
+                <option value="openai">OpenAI (GPT-4o / GPT-5)</option>
+                <option value="gemini">Google (Gemini 2.5 / 3 Flash)</option>
+                <option value="claude">Anthropic (Claude 3.7 Sonnet)</option>
                 <option value="nvidia">NVIDIA NIM (Nemotron 3.5)</option>
-                <option value="deepseek">DeepSeek (V4.1-Flash / R1)</option>
+                <option value="deepseek">DeepSeek (V3 / R1)</option>
               </select>
             </div>
           </div>
 
           <div class="form-actions">
             <button type="submit" class="btn btn-primary" id="submit-btn">
-              <span id="btn-text">Deploy Organic Engines</span>
+              <span id="btn-text">Synthesize Organic Engines</span>
               <span id="btn-spinner" class="spinner hidden"></span>
             </button>
             <button type="button" class="btn btn-secondary" id="load-demo-btn">Load Demo Profile</button>
+            <button type="button" class="btn btn-secondary" id="btn-quick-launch">Launch Cockpit</button>
+            <button type="button" class="btn btn-secondary" id="btn-quick-pseo">pSEO Studio</button>
+            <button type="button" class="btn btn-secondary" id="btn-quick-intercept">Interceptor Radar</button>
+            <button type="button" class="btn btn-secondary" id="btn-quick-leads">Leads & Telemetry</button>
           </div>
         </form>
 
@@ -90,11 +118,14 @@
       </section>
 
       <!-- Results Workspace -->
-      <section id="results-workspace" class="results-workspace hidden">
+      <section id="results-workspace" class="results-workspace">
         <!-- Navigation Tabs -->
         <nav class="tabs-nav">
-          <button class="tab-btn active" data-tab="tab-positioning">Positioning & ICP</button>
-          <button class="tab-btn" data-tab="tab-radar">Live Intent Radar</button>
+          <button class="tab-btn active" data-tab="tab-launch">Day-1 Launch Cockpit</button>
+          <button class="tab-btn" data-tab="tab-pseo">pSEO Matrix Studio</button>
+          <button class="tab-btn" data-tab="tab-intercept">Community Interceptor</button>
+          <button class="tab-btn" data-tab="tab-leads-telemetry">Leads & Telemetry</button>
+          <button class="tab-btn" data-tab="tab-positioning">Positioning & ICP</button>
           <button class="tab-btn" data-tab="tab-microtool">Interactive Micro-Tool</button>
           <button class="tab-btn" data-tab="tab-geo">Princeton GEO</button>
           <button class="tab-btn" data-tab="tab-virality">Virality Loops</button>
@@ -104,26 +135,361 @@
           <button class="tab-btn" data-tab="tab-directory">100+ Directories</button>
         </nav>
 
-        <!-- Tab 1: Positioning & ICP -->
-        <div class="tab-content active" id="tab-positioning">
+        <!-- Tab: Day-1 Launch Cockpit (Option A) -->
+        <div class="tab-content active" id="tab-launch">
+          <div class="card">
+            <div class="card-header-flex">
+              <div>
+                <h3 class="section-title">Day-1 Launch Carpet Bombing Cockpit</h3>
+                <p class="card-subheading">Synchronized zero-hour syndication across 8 high-velocity vectors to guarantee 1,000+ organic day-1 visitors.</p>
+              </div>
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <span class="badge badge-success" id="launch-kit-status">Kit Staged</span>
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-prepare-launch">Prepare 8-Vector Kit</button>
+                <button type="button" class="btn btn-primary btn-sm" id="btn-execute-launch">Execute Launch Waves</button>
+              </div>
+            </div>
+
+            <!-- Execution Status Banner -->
+            <div id="launch-execution-box" class="highlight-box accent-box margin-top hidden"></div>
+
+            <!-- 8-Vector Grid -->
+            <div class="vector-grid" id="launch-vectors-container">
+              <!-- Vector 1: GitHub -->
+              <div class="vector-card">
+                <div class="vector-card-header">
+                  <h4 style="font-size: 0.95rem; color: var(--accent-primary);">1. GitHub Repo Launch</h4>
+                  <span class="rule-badge">Rule #1: README Trojan</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Craft Repo Name:</span>
+                  <code id="launch-gh-name" style="color: var(--text-primary);">zerocac-open-source</code>
+                </div>
+                <p id="launch-gh-desc" style="font-size: 0.85rem; color: var(--text-secondary);">Autonomous organic marketing agent that scales products to $0 CAC.</p>
+                <div style="margin-top: auto; display: flex; gap: 0.5rem;">
+                  <button type="button" class="btn btn-secondary btn-sm" id="btn-view-gh-readme">View README</button>
+                  <button type="button" class="btn btn-secondary btn-sm copy-btn" id="btn-copy-gh-readme" data-copy="">Copy README</button>
+                </div>
+              </div>
+
+              <!-- Vector 2: Show HN -->
+              <div class="vector-card">
+                <div class="vector-card-header">
+                  <h4 style="font-size: 0.95rem; color: #ff6600);">2. Show HN (Hacker News)</h4>
+                  <span class="rule-badge">Rule #2: Craft Title</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Firewall-Piercing Title:</span>
+                  <div id="launch-hn-title" style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary);">Show HN: ZeroCAC - Autonomous AI Marketing Engine That Beats Paid Ads</div>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Founder note engineered with vulnerability, architecture details, and zero marketing hype.</p>
+                <div style="margin-top: auto; display: flex; gap: 0.5rem;">
+                  <button type="button" class="btn btn-secondary btn-sm" id="btn-view-hn-comment">View First Comment</button>
+                  <button type="button" class="btn btn-secondary btn-sm copy-btn" id="btn-copy-hn-comment" data-copy="">Copy Comment</button>
+                </div>
+              </div>
+
+              <!-- Vector 3: Product Hunt & Launch Trio -->
+              <div class="vector-card">
+                <div class="vector-card-header">
+                  <h4 style="font-size: 0.95rem; color: #ff6154);">3. Product Hunt & Launch Trio</h4>
+                  <span class="rule-badge">Rule #3: Maker Teardown</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Tagline (Under 60 chars):</span>
+                  <div id="launch-ph-tagline" style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary);">Stop burning money on paid ads: organic growth on autopilot</div>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">First maker comment pre-written with origin story and open-source benchmark access.</p>
+                <div style="margin-top: auto; display: flex; gap: 0.5rem;">
+                  <button type="button" class="btn btn-secondary btn-sm" id="btn-view-ph-comment">View Maker Note</button>
+                  <button type="button" class="btn btn-secondary btn-sm copy-btn" id="btn-copy-ph-comment" data-copy="">Copy Note</button>
+                </div>
+              </div>
+
+              <!-- Vector 4: Reddit 5-Subreddit Syndication -->
+              <div class="vector-card">
+                <div class="vector-card-header">
+                  <h4 style="font-size: 0.95rem; color: #ff4500);">4. Reddit 5-Subreddit Waves</h4>
+                  <span class="rule-badge">Rule #4: Value-First</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Target Subreddits:</span>
+                  <div style="font-size: 0.85rem; color: var(--text-primary);">r/webdev, r/SaaS, r/selfhosted, r/startups, r/OpenSource</div>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Staggered distribution (Wave 1: Technical proof, Wave 2: Architecture teardown).</p>
+                <div style="margin-top: auto; display: flex; gap: 0.5rem;">
+                  <button type="button" class="btn btn-secondary btn-sm" id="btn-view-reddit-posts">View 5 Posts</button>
+                  <button type="button" class="btn btn-secondary btn-sm copy-btn" id="btn-copy-reddit-post1" data-copy="">Copy Wave 1</button>
+                </div>
+              </div>
+
+              <!-- Vector 5: Dev.to & Hashnode Articles -->
+              <div class="vector-card">
+                <div class="vector-card-header">
+                  <h4 style="font-size: 0.95rem; color: #38bdf8);">5. Dev.to Technical Deep-Dive</h4>
+                  <span class="rule-badge">Rule #5: Architecture First</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Article Headline:</span>
+                  <div id="launch-devto-title" style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary);">How We Built an Autonomous Agent That Replaced Our $10K/mo Google Ads Budget</div>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Full Markdown technical breakdown with code blocks, timing graphs, and architecture diagrams.</p>
+                <div style="margin-top: auto; display: flex; gap: 0.5rem;">
+                  <button type="button" class="btn btn-secondary btn-sm" id="btn-view-devto-article">View Article</button>
+                  <button type="button" class="btn btn-secondary btn-sm copy-btn" id="btn-copy-devto-article" data-copy="">Copy Markdown</button>
+                </div>
+              </div>
+
+              <!-- Vector 6: X & LinkedIn Viral Blasts -->
+              <div class="vector-card">
+                <div class="vector-card-header">
+                  <h4 style="font-size: 0.95rem; color: #10b981);">6. Social Viral Blasts</h4>
+                  <span class="rule-badge">Rule #6: Build-In-Public</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Viral Hook:</span>
+                  <div id="launch-social-hook" style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary);">Paid ads are a tax on products that do not know how to distribute themselves.</div>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">6-tweet viral build-in-public breakdown and LinkedIn slide carousel structure.</p>
+                <div style="margin-top: auto; display: flex; gap: 0.5rem;">
+                  <button type="button" class="btn btn-secondary btn-sm" id="btn-view-social-thread">View Thread</button>
+                  <button type="button" class="btn btn-secondary btn-sm copy-btn" id="btn-copy-social-thread" data-copy="">Copy Thread</button>
+                </div>
+              </div>
+
+              <!-- Vector 7: 15 Core Fast-Track Directories -->
+              <div class="vector-card">
+                <div class="vector-card-header">
+                  <h4 style="font-size: 0.95rem; color: #eab308);">7. 15 Core Directories</h4>
+                  <span class="rule-badge">Rule #7: DA Backlinks</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Direct Backlinks:</span>
+                  <div style="font-size: 0.85rem; color: var(--text-primary);">ProductHunt, Alternativeto, SaaSHub, Toolify, DevHunt (DA 60-90)</div>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Pre-formatted character-compliant bios, taglines, and category tags for zero-delay submission.</p>
+                <div style="margin-top: auto; display: flex; gap: 0.5rem;">
+                  <button type="button" class="btn btn-secondary btn-sm" id="btn-view-directory-pkgs">View 15 Packages</button>
+                </div>
+              </div>
+
+              <!-- Vector 8: Interactive Microtool Edge Sandbox -->
+              <div class="vector-card">
+                <div class="vector-card-header">
+                  <h4 style="font-size: 0.95rem; color: #a855f7);">8. Microtool Edge Sandbox</h4>
+                  <span class="rule-badge">Rule #8: Utility Trap</span>
+                </div>
+                <div class="meta-item">
+                  <span class="meta-label">Active Utility:</span>
+                  <div id="launch-microtool-title" style="font-weight: 600; font-size: 0.85rem; color: var(--text-primary);">B2B SaaS Ad Spend vs Organic Growth Calculator</div>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-secondary);">Zero-dependency reactive web tool deployed directly to Cloudflare Pages edge.</p>
+                <div style="margin-top: auto; display: flex; gap: 0.5rem;">
+                  <button type="button" class="btn btn-secondary btn-sm" id="btn-preview-edge-tool">Preview Live Tool</button>
+                  <button type="button" class="btn btn-secondary btn-sm" id="btn-download-edge-tool">Download HTML</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: pSEO Matrix Studio (Option B) -->
+        <div class="tab-content" id="tab-pseo">
+          <div class="card">
+            <div class="card-header-flex">
+              <div>
+                <h3 class="section-title">Programmatic SEO (pSEO) Matrix Studio</h3>
+                <p class="card-subheading">Multi-axis programmatic generation combining Princeton GEO Answer-First definitions, embedded reactive calculators, and zero-orphan internal linking meshes.</p>
+              </div>
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <label for="pseo-count-input" style="font-size: 0.85rem; color: var(--text-muted);">Pages:</label>
+                <input type="number" id="pseo-count-input" value="15" min="3" max="50" style="width: 60px; padding: 0.3rem 0.5rem; background: var(--bg-primary); border: 1px solid var(--border-color); color: #fff; border-radius: var(--radius-sm);">
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-generate-pseo">Generate Matrix</button>
+                <button type="button" class="btn btn-primary btn-sm" id="btn-deploy-pseo">Deploy to Edge & IndexNow</button>
+              </div>
+            </div>
+
+            <!-- pSEO Summary Banner -->
+            <div id="pseo-summary-box" class="highlight-box accent-box margin-top">
+              <strong>Matrix Coverage:</strong> 15 Validated Programmatic Pages | <strong>Est. Monthly Search Volume:</strong> 28,400 visits | <strong>Internal Linking Mesh:</strong> 45 Contextual Hub Links
+            </div>
+
+            <!-- Pages Matrix Table -->
+            <div class="pseo-table-wrap">
+              <table class="pseo-table">
+                <thead>
+                  <tr>
+                    <th>Target Query / Keyword</th>
+                    <th>Matrix Axis</th>
+                    <th>Demand Score</th>
+                    <th>Est. Monthly Visits</th>
+                    <th>Trojan Hook / Tool</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody id="pseo-tbody">
+                  <!-- Populated by app.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Edge & Sitemap Exporters -->
+            <div class="grid-two-cols margin-top">
+              <div class="card">
+                <div class="card-header-flex">
+                  <h4 class="meta-label">Cloudflare Worker Edge Reverse Proxy Snippet:</h4>
+                  <button type="button" class="btn btn-secondary btn-sm copy-btn" id="btn-copy-worker" data-copy="">Copy JS</button>
+                </div>
+                <pre id="pseo-worker-snippet" class="script-box" style="margin-top: 0.5rem; max-height: 220px; overflow-y: auto;"></pre>
+              </div>
+              <div class="card">
+                <div class="card-header-flex">
+                  <h4 class="meta-label">Generated sitemap.xml (Zero-Orphan Mesh):</h4>
+                  <button type="button" class="btn btn-secondary btn-sm copy-btn" id="btn-copy-sitemap" data-copy="">Copy XML</button>
+                </div>
+                <pre id="pseo-sitemap-snippet" class="script-box" style="margin-top: 0.5rem; max-height: 220px; overflow-y: auto;"></pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Community Interceptor (Option C) -->
+        <div class="tab-content" id="tab-intercept">
+          <div class="card">
+            <div class="card-header-flex">
+              <div>
+                <h3 class="section-title">Community Intent Interceptor & Trojan Synthesizer</h3>
+                <p class="card-subheading">Real-time social radar scanning Reddit, Hacker News, and X for qualified buyer agony. Automatically extracts numeric unit economics and drafts value-first Trojan replies.</p>
+              </div>
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                <span class="badge badge-success" id="intercept-status-badge">Radar Online</span>
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-scan-intercept">Scan Live Streams</button>
+              </div>
+            </div>
+
+            <!-- Interceptor Filter Controls -->
+            <div class="form-row margin-top" style="align-items: flex-end;">
+              <div class="input-group flex-1">
+                <label for="intercept-subreddits">Target Subreddits (comma separated)</label>
+                <input type="text" id="intercept-subreddits" value="SaaS, startups, webdev, selfhosted, OpenSource">
+              </div>
+              <div class="input-group">
+                <label for="intercept-min-score">Min Intent Score</label>
+                <select id="intercept-min-score">
+                  <option value="75" selected>75+ (High Commercial Agony)</option>
+                  <option value="85">85+ (Urgent Problem / Ready to Buy)</option>
+                  <option value="60">60+ (Broader Discovery)</option>
+                </select>
+              </div>
+              <div class="input-group">
+                <label for="intercept-stealth-mode">Stealth Linking Mode</label>
+                <select id="intercept-stealth-mode">
+                  <option value="zero_link_value_trap" selected>Zero-Link Value Trap (100% Anti-Ban)</option>
+                  <option value="direct_tool_link">Direct Tool Link (High Intent Only)</option>
+                  <option value="github_profile">GitHub Profile Redirect</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Telemetry Callout -->
+            <div class="math-callout margin-top" id="intercept-telemetry-callout">
+              <strong>Interceptor Telemetry:</strong> 18 Qualified Opportunities Detected | <strong>Total Savings:</strong> $630 Saved Today vs Ads | <strong>Account Health:</strong> 9:1 Altruistic Karma Camouflage Shield Active
+            </div>
+
+            <!-- Intercept Feed / Cards -->
+            <div class="intercept-feed" id="intercept-feed-container">
+              <!-- Populated dynamically by app.js -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Inbound Leads & Telemetry -->
+        <div class="tab-content" id="tab-leads-telemetry">
+          <div class="card">
+            <div class="card-header-flex">
+              <div>
+                <h3 class="section-title">Inbound Leads & Paid Ads Replacement Telemetry</h3>
+                <p class="card-subheading">Closed-loop conversion tracking, automated behavioral nurture sequences, and empirical ROI metrics comparing organic efficiency to Google/Meta PPC.</p>
+              </div>
+              <div style="display: flex; gap: 0.5rem;">
+                <button type="button" class="btn btn-secondary btn-sm" id="btn-refresh-leads">Refresh Leads</button>
+                <button type="button" class="btn btn-primary btn-sm" id="btn-run-telemetry-audit">Run Self-Healing Audit</button>
+              </div>
+            </div>
+
+            <!-- Top ROI Grid -->
+            <div class="stats-grid margin-top">
+              <div class="stat-card">
+                <span class="stat-label">Total Inbound Leads</span>
+                <div class="stat-val stat-val-green" id="leads-total-count">24 Leads</div>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">From Microtools & pSEO Gates</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-label">Commercial Pipeline Value</span>
+                <div class="stat-val stat-val-green" id="leads-pipeline-value">$8,400</div>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Avg Deal Size $350</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-label">Google PPC Equivalent</span>
+                <div class="stat-val stat-val-indigo" id="leads-ad-saved">$15,400 Saved</div>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">At $35 B2B Benchmark CPC</span>
+              </div>
+              <div class="stat-card">
+                <span class="stat-label">Calculator Conversion Rate</span>
+                <div class="stat-val stat-val-yellow" id="leads-conversion-rate">14.2%</div>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Industry Benchmark: 2.1%</span>
+              </div>
+            </div>
+
+            <!-- Captured Leads Table -->
+            <div class="table-responsive margin-top">
+              <table class="directory-table">
+                <thead>
+                  <tr>
+                    <th>Prospect Email</th>
+                    <th>Company / Project</th>
+                    <th>Interactive Calculator Inputs</th>
+                    <th>Intent Score</th>
+                    <th>Nurture Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody id="leads-tbody">
+                  <!-- Populated dynamically by app.js -->
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Telemetry Self-Healing Audit Box -->
+            <div class="card margin-top">
+              <h4 class="meta-label">Closed-Loop Self-Healing Audit & Growth Recommendations:</h4>
+              <div id="telemetry-audit-container" class="highlight-box" style="margin-top: 0.5rem; line-height: 1.6;">
+                Loading telemetry audit report...
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab: Positioning & ICP -->
+        <div class="tab-content" id="tab-positioning">
           <div class="grid-two-cols">
             <div class="card">
               <h3 class="section-title">Core Positioning</h3>
               <div class="meta-item">
                 <span class="meta-label">Product Name:</span>
-                <span class="meta-val" id="profile-name"></span>
+                <span class="meta-val" id="profile-name">ZeroCAC</span>
               </div>
               <div class="meta-item">
                 <span class="meta-label">Category:</span>
-                <span class="meta-val" id="profile-category"></span>
+                <span class="meta-val" id="profile-category">Autonomous Organic Growth Operating System</span>
               </div>
               <div class="meta-item">
                 <span class="meta-label">One Liner:</span>
-                <p class="highlight-box" id="profile-oneliner"></p>
+                <p class="highlight-box" id="profile-oneliner">Autonomous organic growth engine that scales products to $0 CAC and permanently beats paid ads.</p>
               </div>
               <div class="meta-item">
                 <span class="meta-label">Unique Value Proposition:</span>
-                <p class="highlight-box accent-box" id="profile-uvp"></p>
+                <p class="highlight-box accent-box" id="profile-uvp">Permanent compounding organic equity that replaces $10K+/month rented ad spend with high-velocity software assets.</p>
               </div>
             </div>
 
@@ -139,21 +505,7 @@
           </div>
         </div>
 
-        <!-- Tab 2: Live Intent Radar -->
-        <div class="tab-content" id="tab-radar">
-          <div class="card">
-            <div class="card-header-flex">
-              <div>
-                <h3 class="section-title">Live Intent Radar (Real-Time Pain Interception)</h3>
-                <p class="card-subheading">Scans Reddit, Hacker News, and GitHub Issues for users actively asking for solutions or alternatives right now.</p>
-              </div>
-            </div>
-            <div id="radar-action-box" class="highlight-box accent-box" style="margin-bottom: 1.5rem;"></div>
-            <div id="radar-signals-container" class="opportunities-list"></div>
-          </div>
-        </div>
-
-        <!-- Tab 3: Interactive Micro-Tool -->
+        <!-- Tab: Interactive Micro-Tool -->
         <div class="tab-content" id="tab-microtool">
           <div class="card">
             <h3 class="section-title">Engineering-as-Marketing (Interactive Micro-Tool)</h3>
@@ -161,15 +513,16 @@
             <div class="grid-two-cols" style="margin-bottom: 1.5rem;">
               <div class="highlight-box">
                 <span class="meta-label">Tool Title:</span>
-                <strong id="microtool-name" style="display:block;margin-top:0.25rem;"></strong>
-                <p id="microtool-headline" style="color:var(--text-secondary);font-size:0.9rem;margin-top:0.5rem;"></p>
+                <strong id="microtool-name" style="display:block;margin-top:0.25rem;">B2B Ad Spend vs Organic Growth Calculator</strong>
+                <p id="microtool-headline" style="color:var(--text-secondary);font-size:0.9rem;margin-top:0.5rem;">Calculate how much money you burn on Google and Meta ads compared to compounding organic distribution.</p>
               </div>
               <div class="highlight-box accent-box">
                 <span class="meta-label">Virality & Lead Magnet Hook:</span>
-                <p id="microtool-hook" style="font-size:0.9rem;margin-top:0.5rem;"></p>
+                <p id="microtool-hook" style="font-size:0.9rem;margin-top:0.5rem;">Download customized unit economics breakdown and share interactive ROI comparison.</p>
                 <div style="margin-top:1rem;display:flex;gap:0.75rem;">
                   <button type="button" class="btn btn-primary btn-sm" id="download-tool-btn">Download index.html</button>
                   <button type="button" class="btn btn-secondary btn-sm" id="copy-tool-html-btn">Copy Full HTML</button>
+                  <button type="button" class="btn btn-secondary btn-sm" id="preview-tool-modal-btn">Preview Live</button>
                 </div>
               </div>
             </div>
@@ -180,7 +533,7 @@
           </div>
         </div>
 
-        <!-- Tab 4: Princeton GEO -->
+        <!-- Tab: Princeton GEO -->
         <div class="tab-content" id="tab-geo">
           <div class="card">
             <h3 class="section-title">Princeton Generative Engine Optimization (GEO)</h3>
@@ -199,7 +552,7 @@
           </div>
         </div>
 
-        <!-- Tab 5: Virality Loops -->
+        <!-- Tab: Virality Loops -->
         <div class="tab-content" id="tab-virality">
           <div class="grid-two-cols">
             <div class="card">
@@ -231,7 +584,7 @@
           </div>
         </div>
 
-        <!-- Tab 6: Intent Sniper -->
+        <!-- Tab: Intent Sniper -->
         <div class="tab-content" id="tab-sniper">
           <div class="card">
             <div class="card-header-flex">
@@ -244,7 +597,7 @@
           </div>
         </div>
 
-        <!-- Tab 7: AEO & Comparisons -->
+        <!-- Tab: AEO & Comparisons -->
         <div class="tab-content" id="tab-aeo">
           <div class="card">
             <h3 class="section-title">AEO Comparison Pages & Schemas</h3>
@@ -253,7 +606,7 @@
           </div>
         </div>
 
-        <!-- Tab 8: Viral Content -->
+        <!-- Tab: Viral Content -->
         <div class="tab-content" id="tab-viral">
           <div class="grid-two-cols">
             <div class="card">
@@ -272,7 +625,7 @@
           </div>
         </div>
 
-        <!-- Tab 9: 100+ Directories -->
+        <!-- Tab: 100+ Directories -->
         <div class="tab-content" id="tab-directory">
           <div class="card">
             <h3 class="section-title">Software Directory Submission Packages</h3>
@@ -294,6 +647,14 @@
         </div>
       </section>
     </main>
+
+    <!-- Preview Modal -->
+    <div id="preview-modal" class="preview-modal hidden">
+      <div class="preview-modal-content">
+        <button type="button" class="preview-close-btn" id="preview-close-btn">Close Preview</button>
+        <div id="preview-modal-body"></div>
+      </div>
+    </div>
 
     <!-- Toast Notification -->
     <div id="toast" class="toast hidden">Copied to clipboard!</div>
