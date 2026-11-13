@@ -35,6 +35,15 @@ class IntentClassification(str, Enum):
     IRRELEVANT = "irrelevant"
 
 
+class AutonomyTier(str, Enum):
+    """Autonomous decision tiers for live social interception."""
+
+    MANUAL_REVIEW = "manual_review"
+    CAMOUFLAGE_AUTONOMOUS = "camouflage_autonomous"
+    FULL_AUTONOMOUS = "full_autonomous"
+
+
+
 class AccountCredential(BaseModel):
     """Social account profile and anti-ban karma metrics."""
 
@@ -114,3 +123,20 @@ class InterceptTelemetryRecord(BaseModel):
         default=0.0,
         description="Displaced Google/Meta ad spend value",
     )
+
+
+class DaemonStatusReport(BaseModel):
+    """Health and iteration report for the background interceptor daemon."""
+
+    is_running: bool = Field(default=False, description="Whether daemon polling loop is active")
+    uptime_seconds: float = Field(default=0.0, description="Elapsed runtime in seconds")
+    poll_interval_seconds: float = Field(default=60.0, description="Sleep duration between stream scans")
+    autonomy_tier: AutonomyTier = Field(
+        default=AutonomyTier.MANUAL_REVIEW,
+        description="Active autonomous decision tier",
+    )
+    total_iterations: int = Field(default=0, description="Total poll iterations executed")
+    total_opportunities_found: int = Field(default=0, description="Deduplicated buyer pain signals detected")
+    total_dispatched: int = Field(default=0, description="Total replies dispatched to platforms")
+    last_polled_at: Optional[str] = Field(default=None, description="ISO timestamp of last completed poll")
+
