@@ -47,6 +47,8 @@ from zerocac.pseo.deployer import PSEOBatchDeployer
 from zerocac.pseo.engine import PSEOMatrixEngine
 from zerocac.pseo.models import PSEOMatrixPackage
 from zerocac.telemetry.engine import TelemetryEngine
+from zerocac.virality.tracker import ReferralTracker
+
 
 app = typer.Typer(
     name="zerocac",
@@ -311,6 +313,64 @@ def virality(
             border_style="green",
         )
     )
+
+
+@app.command(name="referral")
+def referral_cmd(
+    email: str = typer.Argument(..., help="User email address to query or create referral link"),
+    base_url: str = typer.Option("https://zerocac.org", "--base-url", "-u", help="Base landing page URL"),
+) -> None:
+    """Generate or view tracked referral link, K-factor, and milestone rewards."""
+    tracker = ReferralTracker()
+    stats = asyncio.run(tracker.get_stats(email, base_url=base_url))
+
+    rewards_text = "\n".join(
+        f"  - [bold green]UNLOCKED:[/bold green] {r.name} ({r.description})"
+        for r in stats.unlocked_rewards
+    ) or "  - None yet (Drive 3 referrals to unlock Princeton GEO package)"
+
+    next_text = f"{stats.next_milestone.name} (Requires {stats.next_milestone.required_referrals} referrals)" if stats.next_milestone else "All Milestones Achieved!"
+
+    console.print(
+        Panel(
+            f"[bold cyan]Referral Share URL:[/bold cyan] {stats.referral_url}\n"
+            f"[bold yellow]Referral Code:[/bold yellow] {stats.referral_code}\n\n"
+            f"[bold green]Total Conversions:[/bold green] {stats.total_conversions} | [bold cyan]Clicks:[/bold cyan] {stats.total_clicks}\n"
+            f"[bold magenta]Calculated K-Factor:[/bold magenta] {stats.k_factor} ({'Viral Growth' if stats.k_factor >= 1.0 else 'Compounding Sub-Viral'})\n\n"
+            f"[bold green]Milestone Rewards:[/bold green]\n{rewards_text}\n\n"
+            f"[bold yellow]Next Milestone Target:[/bold yellow] {next_text}",
+            title="ZeroCAC Product-Led Referral Engine",
+            border_style="green",
+        )
+    )
+
+
+@app.command(name="leaderboard")
+def leaderboard_cmd(
+    limit: int = typer.Option(10, "--limit", "-l", help="Number of champions to display"),
+) -> None:
+    """Display community leaderboard of top organic CAC killers."""
+    tracker = ReferralTracker()
+    entries = asyncio.run(tracker.get_leaderboard(limit=limit))
+
+    table = Table(title="Leaderboard of Organic CAC Killers", border_style="green")
+    table.add_column("Rank", justify="center", style="bold green")
+    table.add_column("Champion", style="cyan")
+    table.add_column("Referrals", justify="center", style="bold yellow")
+    table.add_column("Ad Dollars Saved", justify="right", style="green")
+    table.add_column("Honorary Title", style="magenta")
+
+    for e in entries:
+        table.add_row(
+            f"#{e.rank}",
+            e.user_handle,
+            str(e.referrals_driven),
+            f"${e.ad_dollars_saved_usd:,.0f}",
+            e.badge_title,
+        )
+
+    console.print(table)
+
 
 
 

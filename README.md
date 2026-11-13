@@ -249,10 +249,11 @@ zerocac/
 │   ├── launch/                      # Hardened 8-Vector Day-1 Launch Carpet Bombing Orchestrator
 │   ├── pseo/                        # Programmatic SEO Matrix Engine (3 axes, search validation, mesh)
 │   ├── interceptor/                 # Direct Social & Community Interceptor (real-time stream, 9:1 shield)
+│   ├── virality/                    # Product-Led K-Factor Viral Referral Engine & Milestone Rewards
 │   ├── web/                         # FastAPI application and modular REST routers
 │   ├── cli.py                       # Typer-powered terminal CLI
 │   └── config.py                    # Pydantic v2 settings manager
-└── tests/                           # 127 unit and integration tests (100% pass rate in ~3.8s)
+└── tests/                           # 133 unit and integration tests (100% pass rate in ~3.8s)
 ```
 
 ---
