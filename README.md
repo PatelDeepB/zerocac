@@ -15,7 +15,7 @@
   <a href="https://python.org"><img src="https://img.shields.io/badge/Python-3.11%20%7C%203.12-6366f1.svg?style=for-the-badge" alt="Python"></a>
   <a href="#supported-frontier-models"><img src="https://img.shields.io/badge/Frontier_Models-OpenAI_GPT--6_|_Gemini_4_|_Claude_5.5_|_Nemotron-06b6d4.svg?style=for-the-badge" alt="AI Models"></a>
   <a href="#zero-ad-spend-guarantee"><img src="https://img.shields.io/badge/Ad_Spend-$0_Guaranteed-f59e0b.svg?style=for-the-badge" alt="Zero Ad Spend"></a>
-  <a href="#test-suite"><img src="https://img.shields.io/badge/Tests-116_Passed_100%25-10b981.svg?style=for-the-badge" alt="Tests"></a>
+  <a href="#test-suite"><img src="https://img.shields.io/badge/Tests-143_Passed_100%25-10b981.svg?style=for-the-badge" alt="Tests"></a>
 </p>
 
 ---
@@ -130,6 +130,12 @@ zerocac intercept telemetry
 
 # Run 24/7 persistent background daemon with Telegram push alerts
 zerocac intercept daemon --interval 60 --autonomy manual_review --min-score 75
+
+# Store encrypted platform credentials in Fernet local session vault
+zerocac intercept login reddit your_username --token your_token --cookie your_cookie
+
+# List active encrypted sessions in the vault (tokens redacted)
+zerocac intercept sessions
 ```
 
 ### 4. Autonomous Edge Deployment (`zerocac deploy`)
@@ -167,6 +173,12 @@ Tracks real conversions, computes $0 CAC ad savings, and automatically identifie
 ```bash
 # View aggregated organic ROI, conversion rates, and self-healing actions
 zerocac telemetry
+
+# Launch 3-variant multi-armed bandit A/B test (Utilitarian, Contrarian, Quantitative)
+zerocac experiment your-tool-slug
+
+# Calculate empirical ad dollars saved vs Google/Meta PPC benchmarks
+zerocac roi --visitors 14280 --leads 42 --cpc 35.0 --cpl 180.0
 ```
 
 ### 8. High-Velocity Velocity Engines
@@ -185,6 +197,16 @@ zerocac virality https://yourproduct.com
 
 # Execute full foundation campaign
 zerocac run https://yourproduct.com --velocity --out dist_campaign
+```
+
+### 9. Product-Led K-Factor Virality Engine (`zerocac referral` & `zerocac leaderboard`)
+Calculates viral expansion coefficient (K = i * c) with milestone reward unlocks (Tier 1: Princeton GEO, Tier 2: Unmetered Interceptor, Tier 3: Edge Proxy):
+```bash
+# Generate or view unique referral link and milestone status
+zerocac referral founder@example.com
+
+# View community leaderboard ranked by referrals and ad spend saved
+zerocac leaderboard
 ```
 
 ---
@@ -253,7 +275,7 @@ zerocac/
 │   ├── web/                         # FastAPI application and modular REST routers
 │   ├── cli.py                       # Typer-powered terminal CLI
 │   └── config.py                    # Pydantic v2 settings manager
-└── tests/                           # 140 unit and integration tests (100% pass rate in ~3.8s)
+└── tests/                           # 143 unit and integration tests (100% pass rate in ~13s)
 ```
 
 ---
