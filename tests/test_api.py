@@ -199,3 +199,36 @@ def test_generate_endpoint_produces_full_campaign() -> None:
     assert len(data["narrative"]["x_thread"]) == 5
     assert data["directory"] is not None
     assert data["directory"]["total_directories"] >= 10
+
+
+def test_serve_dashboard_contains_mission_control_elements() -> None:
+    """Ensure GET / serves all mission control control rooms and vector cards."""
+    # Arrange & Act
+    response = client.get("/")
+
+    # Assert
+    assert response.status_code == 200
+    html = response.text
+    assert "ZeroCAC Mission Control" in html
+    assert "Day-1 Launch Cockpit" in html
+    assert "pSEO Matrix Studio" in html
+    assert "Community Interceptor" in html
+    assert "Inbound Leads & Paid Ads Replacement Telemetry" in html
+    assert "mission-stats-grid" in html
+    assert "launch-vectors-container" in html
+    assert "pseo-tbody" in html
+    assert "intercept-feed-container" in html
+
+
+def test_static_assets_serve_correctly() -> None:
+    """Ensure static CSS and JS bundles serve with HTTP 200."""
+    # Act
+    css_res = client.get("/static/style.css")
+    js_res = client.get("/static/app.js")
+
+    # Assert
+    assert css_res.status_code == 200
+    assert "stats-grid" in css_res.text
+    assert js_res.status_code == 200
+    assert "setupLaunchCockpit" in js_res.text
+

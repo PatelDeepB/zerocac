@@ -204,6 +204,12 @@ ZeroCAC features a multi-provider router with dynamic fallback failover:
 
 ### Web Control Dashboard (Recommended)
 
+ZeroCAC includes a comprehensive Mission-Control Web UI with dedicated control rooms:
+- **Day-1 Launch Cockpit:** Synchronized 8-vector syndication (GitHub, Show HN, Product Hunt, 5x Reddit, Dev.to, Social Blast, 15 Directories, Microtool Sandbox).
+- **pSEO Matrix Studio:** Multi-axis programmatic generation, search demand validation, Princeton GEO live preview, and Edge Reverse Proxy exporter.
+- **Community Interceptor Radar:** Real-time social agony stream monitoring across Reddit, HN, and X with OP numeric unit economics and 9:1 karma camouflage protection.
+- **Leads & Telemetry:** Inbound prospect conversion tracking, commercial pipeline calculations ($ saved vs Google Ads at $35 CPC), and self-healing telemetry.
+
 ```bash
 # Clone the repository
 git clone https://github.com/PatelDeepB/zerocac.git
@@ -243,7 +249,7 @@ zerocac/
 │   ├── web/                         # FastAPI application and modular REST routers
 │   ├── cli.py                       # Typer-powered terminal CLI
 │   └── config.py                    # Pydantic v2 settings manager
-└── tests/                           # 116 unit and integration tests (100% pass rate in ~3.8s)
+└── tests/                           # 118 unit and integration tests (100% pass rate in ~3.8s)
 ```
 
 ---
