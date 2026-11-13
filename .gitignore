@@ -30,6 +30,8 @@ htmlcov/
 .env
 .env.local
 .local_changelog.md
+*.db
+
 
 # IDEs and OS artifacts
 .vscode/

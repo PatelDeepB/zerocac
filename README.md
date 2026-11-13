@@ -127,6 +127,9 @@ zerocac intercept reply opp-12345 --url "https://reddit.com/r/devops/comments/xy
 
 # View displaced ad spend and acquired leads
 zerocac intercept telemetry
+
+# Run 24/7 persistent background daemon with Telegram push alerts
+zerocac intercept daemon --interval 60 --autonomy manual_review --min-score 75
 ```
 
 ### 4. Autonomous Edge Deployment (`zerocac deploy`)
@@ -249,7 +252,7 @@ zerocac/
 │   ├── web/                         # FastAPI application and modular REST routers
 │   ├── cli.py                       # Typer-powered terminal CLI
 │   └── config.py                    # Pydantic v2 settings manager
-└── tests/                           # 118 unit and integration tests (100% pass rate in ~3.8s)
+└── tests/                           # 127 unit and integration tests (100% pass rate in ~3.8s)
 ```
 
 ---

@@ -32,8 +32,10 @@ from zerocac.leads.nurture import NurtureEngine
 from zerocac.leads.repository import LeadRepository
 from zerocac.dispatchers.models import ApprovalStatus, DispatchChannel, DispatchItem
 from zerocac.dispatchers.queue import DispatchQueue
+from zerocac.interceptor.daemon import InterceptorDaemon
 from zerocac.interceptor.engine import CommunityInterceptorEngine
 from zerocac.interceptor.models import (
+    AutonomyTier,
     IntentClassification,
     InterceptOpportunity,
     SocialPlatform,
@@ -909,6 +911,58 @@ def intercept_telemetry_cmd() -> None:
             border_style="green",
         )
     )
+
+
+@intercept_app.command(name="daemon")
+def intercept_daemon_cmd(
+    url: Optional[str] = typer.Option(None, "--url", "-u", help="Product landing page URL"),
+    description: Optional[str] = typer.Option(None, "--desc", "-d", help="Direct product description"),
+    name: Optional[str] = typer.Option("Product", "--name", "-n", help="Product brand name"),
+    subreddits: Optional[str] = typer.Option(None, "--subreddits", "-s", help="Comma-separated subreddits"),
+    min_score: int = typer.Option(75, "--min-score", "-m", help="Minimum qualifying intent score"),
+    alert_threshold: int = typer.Option(85, "--alert-threshold", "-t", help="Telegram push alert threshold"),
+    interval: float = typer.Option(60.0, "--interval", "-i", help="Poll interval in seconds"),
+    autonomy: str = typer.Option("manual_review", "--autonomy", "-a", help="Autonomy tier"),
+    dry_run: bool = typer.Option(True, "--dry-run/--no-dry-run", help="Simulate network posts"),
+    once: bool = typer.Option(False, "--once", help="Run a single scan iteration and exit"),
+) -> None:
+    """Run persistent 24/7 background social intent interception daemon."""
+    subs = [s.strip() for s in subreddits.split(",")] if subreddits else None
+    tier = AutonomyTier(autonomy) if autonomy in AutonomyTier._value2member_map_ else AutonomyTier.MANUAL_REVIEW
+
+    daemon = InterceptorDaemon(
+        tool_url=url or "https://zerocac.org",
+        subreddits=subs,
+        min_score=min_score,
+        alert_threshold=alert_threshold,
+        autonomy_tier=tier,
+        poll_interval=interval,
+        dry_run=dry_run,
+    )
+
+    if once:
+        opps = asyncio.run(daemon.run_once())
+        console.print(f"[bold green]Poll pass complete:[/bold green] Found {len(opps)} new qualified opportunities.")
+        _render_intercept_scan_table(opps)
+        return
+
+    console.print(
+        Panel(
+            f"[bold green]24/7 Interceptor Daemon Active[/bold green]\n"
+            f"[bold cyan]Poll Interval:[/bold cyan] {interval}s | [bold yellow]Autonomy Tier:[/bold yellow] {tier.value}\n"
+            f"[bold magenta]Min Intent Score:[/bold magenta] {min_score} | [bold green]Alert Threshold:[/bold green] {alert_threshold}\n"
+            f"[dim]Press Ctrl+C to halt daemon gracefully.[/dim]",
+            title="ZeroCAC Continuous Growth Radar",
+            border_style="green",
+        )
+    )
+
+    try:
+        asyncio.run(daemon.start())
+    except KeyboardInterrupt:
+        daemon.stop()
+        console.print("[yellow]Interceptor daemon halted gracefully.[/yellow]")
+
 
 
 @app.command()
