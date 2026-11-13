@@ -41,6 +41,7 @@ from zerocac.interceptor.models import (
     SocialPlatform,
     StealthMode,
 )
+from zerocac.interceptor.session_vault import SessionVault
 from zerocac.launch.models import HardenedLaunchPackage
 from zerocac.launch.orchestrator import LaunchOrchestrator
 from zerocac.pseo.deployer import PSEOBatchDeployer
@@ -1090,6 +1091,55 @@ def intercept_daemon_cmd(
     except KeyboardInterrupt:
         daemon.stop()
         console.print("[yellow]Interceptor daemon halted gracefully.[/yellow]")
+
+
+@intercept_app.command(name="login")
+def login_intercept_cmd(
+    platform: str = typer.Argument(..., help="Social platform: reddit, hacker_news, x_twitter"),
+    username: str = typer.Argument(..., help="Account username or handle"),
+    token: Optional[str] = typer.Option(None, "--token", "-t", help="API token or auth bearer"),
+    cookie: Optional[str] = typer.Option(None, "--cookie", "-c", help="Session cookie string"),
+) -> None:
+    """Store encrypted authentication tokens or cookies in the local session vault."""
+    session_data = {}
+    if token:
+        session_data["auth_token"] = token
+    if cookie:
+        session_data["cookie"] = cookie
+
+    if not session_data:
+        session_data["auth_token"] = "simulated_token_placeholder"
+
+    vault = SessionVault()
+    vault.store_session(platform=platform, username=username, session_data=session_data)
+    console.print(f"[bold green]Successfully stored encrypted session for {platform.upper()} (u/{username})[/bold green]")
+
+
+@intercept_app.command(name="sessions")
+def sessions_intercept_cmd() -> None:
+    """List all encrypted accounts and sessions configured in the local vault."""
+    vault = SessionVault()
+    sessions = vault.list_active_sessions()
+
+    if not sessions:
+        console.print("[dim]No sessions found in local vault. Use 'zerocac intercept login' to add one.[/dim]")
+        return
+
+    table = Table(title="Encrypted Interceptor Session Vault", border_style="green")
+    table.add_column("Platform", style="bold cyan")
+    table.add_column("Username", style="yellow")
+    table.add_column("Configured Keys", style="green")
+    table.add_column("Last Updated", style="dim")
+
+    for s in sessions:
+        table.add_row(
+            s["platform"].upper(),
+            s["username"],
+            ", ".join(s["configured_keys"]),
+            s["updated_at"],
+        )
+    console.print(table)
+
 
 
 

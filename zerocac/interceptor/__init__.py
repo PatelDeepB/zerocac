@@ -19,6 +19,7 @@ from zerocac.interceptor.models import (
 from zerocac.interceptor.notifier import InterceptorNotifier
 from zerocac.interceptor.poster import SocialPoster
 from zerocac.interceptor.scorer import IntentScorer
+from zerocac.interceptor.session_vault import SessionVault
 from zerocac.interceptor.store import InterceptorStore
 from zerocac.interceptor.synthesizer import PractitionerReplySynthesizer
 from zerocac.interceptor.vault import AccountVault
@@ -44,4 +45,5 @@ __all__ = [
     "InterceptorStore",
     "InterceptorNotifier",
     "InterceptorDaemon",
+    "SessionVault",
 ]
