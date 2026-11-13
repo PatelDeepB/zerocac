@@ -29,6 +29,7 @@ from zerocac.web.routers.launch import router as launch_router
 from zerocac.web.routers.leads import router as leads_router
 from zerocac.web.routers.pseo import router as pseo_router
 from zerocac.web.routers.telemetry import router as telemetry_router
+from zerocac.web.routers.virality import router as virality_router
 
 app = FastAPI(
     title="ZeroCAC API",
@@ -43,6 +44,7 @@ app.include_router(launch_router)
 app.include_router(leads_router)
 app.include_router(pseo_router)
 app.include_router(telemetry_router)
+app.include_router(virality_router)
 
 app.add_middleware(
     CORSMiddleware,
